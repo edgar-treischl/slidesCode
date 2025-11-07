@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Friend don’t let friends: Code</title>
+    <title>Code Quality and Style</title>
     <meta charset="utf-8" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <script src="libs/mark.js/mark.min.js"></script>
@@ -82,7 +82,7 @@ class: center, middle
 
 
   
-# Friend don't let friends ...
+# Friends don't let friends ...
 
 ## These slides are work in progress
 
@@ -90,7 +90,7 @@ class: center, middle
 &lt;a href="http://www.edgar-treischl.de" target="_blank"&gt;www.edgar-treischl.de&lt;/a&gt;
 &lt;br/&gt;
 &lt;br/&gt;
-.large[Last update: 2025-08-25]
+.large[Last update: 2025-11-07]
 &lt;br/&gt;
 &lt;br/&gt;
 This presentation is licensed under a CC-BY-NC 4.0 license.
@@ -122,141 +122,498 @@ You may copy, distribute, and use the slides in your own work, as long as you gi
 
 
 
-### 01 Don't ... 🙊 
+### 01 Bad Habits 🙊 
 ### 02 Coding conventions 🚧
 ### 03 Develop with style and grace 😎
-### 04 Test 🏃‍♂️
-### 04 Document 📄
-
-
----
-## The End
 
 
 
 
 
 ---
-## 01: Why R Packages?
 
-### I will not create something like ggplot2, so why should I create a package anyway? 🫨 
+class: middle, center, inverse
 
-.pull-left[
+## Let's face the truth ...
 
-- *Reusability and Distribution*: Make sure everything needed to run is available. Plus: simplifies version control, dependency management, and installation.
-- *Organization and Maintainability*: A package encourages a clean and organized code, making it easier to maintain, update, and extend over time.
-
-- *Documentation*: A package allows to include automatic documentation (help files, website, vignettes) , making it much easier for others - and the future yourself - to understand how it works.
-
-
-]
-
-.pull-right[
-&lt;figure&gt;
-    &lt;a href="https://r-pkgs.org" target="_blank"&gt;&lt;img src="https://r-pkgs.org/images/cover-2e-small.png" alt="www.edgar-treischl.de" width="65%"/&gt;
-&lt;/figure&gt;
-]
-
----
-## 02: devtools does the heavy lifting 🏋️‍♂️
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; "The aim of devtools is to make package development easier by providing R functions that simplify and expedite common tasks. R Packages is a book based around this workflow." (Wickham et al. 2022)
-&lt;/div&gt;
-
-
-.pull-left[
-
-
-
-&lt;figure&gt;
-    &lt;a href="https://devtools.r-lib.org" target="_blank"&gt;&lt;img src="images/devtools.png" alt="www.edgar-treischl.de" width="65%" align="right"/&gt;
-&lt;/figure&gt;
-
-]
-
-.pull-right[
-&lt;figure&gt;
-    &lt;a href="https://devtools.r-lib.org" target="_blank"&gt;&lt;img src="https://devtools.r-lib.org/logo.svg" alt="www.edgar-treischl.de" width="55%" align="center"/&gt;
-&lt;/figure&gt;
-]
 
 
 
 ---
-## 02: usethis
-
-
-
-.pull-left[
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; "usethis is a workflow package: it automates repetitive tasks that arise during project setup and development, both for R packages and non-package projects." (Wickham et al. 2022)
-&lt;/div&gt;
-
-
-]
-
-.pull-right[
-&lt;figure&gt;
-    &lt;a href="https://usethis.r-lib.org/" target="_blank"&gt;&lt;img src="https://usethis.r-lib.org/logo.png" alt="www.edgar-treischl.de" width="55%" align="center"/&gt;
-&lt;/figure&gt;
-]
-
-
-
----
-background-image: url(https://i.gifer.com/8rTu.gif)
+background-image: url("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTNpOWh5ZmJsdnk1Mnh0OGYxNHhvajZwNzFzbHZoNWw4aXAyY2c4YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Qumf2QovTD4QxHPjy5/giphy.gif")
 background-size: cover
 class: bottom, center
 
 
+## .white[... develop, but get rid of bad habits first &lt;br&gt; 😄] 
+
+&lt;div class="remark-footer"&gt;&lt;a href="https://giphy.com/gifs/moodman-batman-smack-smacked-Qumf2QovTD4QxHPjy5" target="_blank" style="color: white;"&gt;Images source: MOODMAN&lt;/a&gt;&lt;/div&gt;
 
 
-## .white[Let's get started ... 😈] 
 
-&lt;div class="remark-footer"&gt;&lt;a href="https://gifer.com/de/8rTu" target="_blank" style="color: black;"&gt;Source: Mark Hamill&lt;/a&gt;&lt;/div&gt;
+
+---
+## Wipe the Slate Clean: Restart R Like a Pro
+
+- Ever had code that worked perfectly on your machine — but mysteriously breaks when someone else tries to run it?
+
+- Old objects in your global environment, packages from another project, or global options you tweaked and forgot about — they all linger like ghosts. 
+
+
+
+
+``` r
+# Leftover objects
+important_setting &lt;- "production"
+
+# Previously loaded function from packages
+library(mypackage)
+
+# Changed global options
+options(stringsAsFactors = TRUE)  # Please don't do this in 2025
+```
+
+Your code may unknowingly rely on these leftovers. It runs perfectly on your machine — but fails for anyone else who doesn’t share your local setup. 
+
+
+
+
+---
+## Wipe the Slate Clean: Restart R Like a Pro
+
+.pull-left[
+
+- 🔁 Restart your R session, run your code from scratch (Ctrl + Shift + F10) and make it a habit
+
+- Do not save the workspace and do not load the workspace from an `.Rdata` file (Based on Bryan et al. 2021). 
+
+- It’s the only way to ensure your script actually works in a fresh, clean R session 
+
+ 
+#### The rm approach 🔫
+
+- `rm(list = ls())` deletes user-created objects from the global workspace.
+
+- **But**: The script may break due to hidden dependencies on things you ran in this R process before you executed: Attached packages are not detached, changed options are not restored, working directory is untouched!
+
+
+
+
+
+]
+
+.pull-right[
+&lt;figure&gt;
+    &lt;img src="https://rstats.wtf/img/rstudio-workspace.png" style="width: 100%"/&gt;
+&lt;/figure&gt;
+]
+
+
+---
+background-image: url(https://github.com/rstudio/hex-stickers/blob/main/PNG/knitr.png?raw=true)
+background-position: 90% 5%
+background-size: 8%
+
+## R vs. Rmd
+
+### 👈 Code lives in R, Code and Text in Rmd files
+
+If you need to create a document from a source code, run:
+
+
+``` r
+#spin converts an R script to an Rmd file
+knitr::spin("script.R")
+```
+
+- Roxygen comments will be treated as text (more about that later)
+- Add yaml header to the script to control the output
+
+
+If you need to extract the code from an Rmd file, run:
+
+
+
+``` r
+#Extracts R code chunks from Rmd files
+knitr::purl()
+```
+
+- Adjust the level of extraction with the `documentation` parameter (e.g., code only)
+- Set `purl = FALSE` to avoid the extraction of code chunks (see Xie 2024)
+
+
+---
+background-image: url("https://i.gifer.com/3wMh.gif")
+background-size: cover
+class: bottom, center
+
+## .white[Let's get dirty 😜] 
+
+
+
+
+
+---
+## 01: Write Clean Code
+
+### Clean code prioritizes:
+
+- Readability
+- Simplicity
+- Clarity
+
+### Messy code often reveals itself through several common signs: 
+
+- Long, complicated functions that try to do too much
+- Duplicated code scattered throughout scripts
+- Inconsistent naming that leaves you guessing what’s going on
+- Absolute paths
+- Hardcoded values
+
+
+---
+
+## Don't Go Places Where You Don't Belong ...
+
+&lt;img src="images/drake.png" style="width: 65%"/&gt;
+
+
+---
+
+## 01: Abandon absolute paths, they will break anyway
+
+
+
+``` r
+# Don't:
+readr::read_csv("~/Documents/Berichte/orig/104_data.csv")
+```
+
+```
+## Error: '~/Documents/Berichte/orig/104_data.csv' does not exist.
+```
+
+### ⚡ Ceate a project and use the `here` package:
+
+
+``` r
+# Here returns the path to the project
+here::here()
+```
+
+```
+## [1] "/Users/edgar/Develop/slides/slidesCode"
+```
+
+
+
+``` r
+# Create a path to the file
+here::here("data", "descriptive_title.csv")
+```
+
+```
+## [1] "/Users/edgar/Develop/slides/slidesCode/data/descriptive_title.csv"
+```
+
+
+
+
+
+
+
+
+
 
 
 
 ---
 
-## 02: Steps to create a package
+## Avoid Hardcoding Values or I’ll Burn Your Code
 
 .pull-left[
 
-1. Create a new repository on GitHub/GitLab and clone it
-2. Create a package a package via: 
+&lt;div class="info-box"&gt;
+  &lt;i&gt;🦜&lt;/i&gt; The pain begins if you forget to integrate those values as function parameters and later on your code becomes a mess to maintain.
+&lt;/div&gt;
+
 
 
 ``` r
-# create_package adds ...
-usethis::create_package(here::here())
+library(dplyr)
+filtered_data &lt;- mtcars |&gt; filter(mpg &gt; 25)
 ```
+
+]
+
+.pull-right[
+
+&lt;div class="info-box"&gt;
+  &lt;i&gt;🦜&lt;/i&gt; What if you want to filter by a different age? You’d have to search through your code to find every instance of 30 and change it — and probably forget values.
+&lt;/div&gt;
+
+
+
+
+
+
+``` r
+# Hardcoded rounding is not bad, true?
+mtcars |&gt; mutate(mpg_rounded = round(mpg, 2))
+```
+
+]
+
+
+
+
+
+
+
+---
+
+## AHV or I’ll Burn Your Code II
+
+
+### Set parameters at the top of your file while developing ...
+
+
+``` r
+round_digits &lt;- 2
+mpg_threshold &lt;- 25
+
+mtcars |&gt;
+  filter(mpg &gt; mpg_threshold) |&gt;
+  mutate(mpg_rounded = round(mpg, round_digits))
+```
+
+```
+##                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb mpg_rounded
+## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1        32.4
+## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2        30.4
+## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1        33.9
+## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1        27.3
+## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2        26.0
+## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2        30.4
+```
+
+
+- Once you start wrapping code into functions, pass those values as arguments — even if you don’t plan to change them right now. You’re future-proofing your code.
+
+
+---
+
+## AHV or I’ll Burn Your Code III
+
+### Move it into a function with a default:
+
+
+``` r
+filter_and_round &lt;- function(data, mpg_limit, digits = 2) {
+  data |&gt;
+    dplyr::filter(mpg &gt; mpg_limit) |&gt;
+    dplyr::mutate(mpg_rounded = round(mpg, digits))
+}
+
+# Use the default
+filter_and_round(mtcars, mpg_limit = 25)
+```
+
+```
+##                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb mpg_rounded
+## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1        32.4
+## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2        30.4
+## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1        33.9
+## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1        27.3
+## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2        26.0
+## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2        30.4
+```
+
+=&gt; This approach makes your code flexible, readable, and much easier to maintain. 
+
+---
+# Modular Code
+
+### 👉 Each function should do one thing — and do it well
+
+- Modularity means breaking your code into smaller, self-contained pieces—typically functions — where each one handles a specific task
+- Instead of writing one long script that tries to do everything, modular code splits the work into clear, manageable chunks
+
+
+### 👉 This makes your code easier to read, test, and develop
+
+- Each piece can be understood and worked on independently
+- Reusable functions save time and reduce duplication
+- Testing is simpler because you can write small, focused tests instead of validating everything at once
+- And when changes are needed, they’re easier to make since you only need to update one part of the codebase
+
+
+---
+
+# Don’t Dump Everything in One Function
+
+.pull-left[
+
+- It’s tempting to just get everything working in a single function or a long R script — a pipeline that loads the data, cleans it, analyzes it, and spits out a plot or, more generally, the result.
+
+- As soon as you need to tweak something, explain it to someone else, or reuse part of it, things get messy. Suddenly, you’re stuck picking apart a script that’s hard to read, hard to change, and the code may break.
+
+]
+
+.pull-right[
+
+
+``` r
+# Load data
+df &lt;- read.csv("data.csv")
+
+# Data cleaning
+df &lt;- df |&gt; 
+  filter(!is.na(price)) |&gt; 
+  mutate(price_log = log(price)) |&gt; 
+  do_furher_fancy_things
+
+# Analysis
+model &lt;- lm(price_log ~ bedrooms + sqft, data = df)
+
+# Plotting
+plot(df$sqft, df$price_log)
+```
+
+
+]
+
+### Keep it simple, stupid! Don't violated the KISS 👄 principle
+
+
+---
+
+# Don’t Dump Everything in One Function
+
+
+&lt;div class="info-box"&gt;
+  &lt;i&gt;🦜&lt;/i&gt; At first glance, it might seem fine — but now imagine you want to reuse the cleaning logic in a different script. Or test how the model works on another dataset. Or change the plotting code without rerunning the model. You’re stuck. Everything depends on everything else.
+&lt;/div&gt;
+
+&gt; Your next step is code modularization which means breaking your logic into small, focused functions that each do one thing. That’s called separation of concerns, and it’s what keeps your code from turning into a tangled mess of confusion. Do yourself a huge favour: break your code into logical, reusable pieces.
+
+- Separate at least logically, for example, put function that belong to data preparation, analysis, and reporting into different functions.
+- If you want to organize your codebase, create separate R scripts (e.g., analyze.R, plot.R) that follow your internal logic — and define functions for each logical, reusable step.
+
+
+
+---
+
+# Don’t Dump Everything in One Function
+
+Break it down into smaller functions:
+
+```r
+# source.R
+load_data &lt;- function(path) {
+  read.csv(path)
+}
+
+clean_data &lt;- function(df) {
+  df |&gt; filter(!is.na(price)) |&gt; mutate(price_log = log(price))
+  ...
+}
+
+#&gt; And so on ...
+```
+
+
+#### ⚡ This approach still violates the single responsibility principle, but it’s a start!
+
+
+---
+
+# Don’t Dump Everything in One Function
+
+=&gt; If the last code is saved in a file called `source.R`, you can source it and call the functions as needed.
+
+
+``` r
+# Source the functions
+source("source.R")
+
+# Main script
+df &lt;- load_data("data.csv")
+df_clean &lt;- clean_data(df)
+model &lt;- fit_model(df_clean)
+plot_relationship(df_clean)
+```
+
+
+&lt;div class="info-box"&gt;
+  &lt;i&gt;🦜&lt;/i&gt; This version is better because it's modular, readable, and flexible. Want to swap in a new dataset? Easy. Want to test the clean_data function? Just do it, you are on fire.
+&lt;/div&gt;
+
+
+
+
+---
+
+# Don’t Dump Everything in One Function
+
+
+If the code need to run in sequence, wrap them in a function that makes the workflow explicit.
+
+
+``` r
+# Wrap the workflow in a function
+run_job &lt;- function(data_path) {
+  df &lt;- load_data(data_path)
+  df_clean &lt;- clean_data(df)
+  model &lt;- fit_model(df_clean)
+  send_mail(result = model)
+  result &lt;- plot_relationship(df_clean)
+  
+  return(result)
+}
+```
+
+- It helps others understand how your code fits together
+
+- Only after we break our code into logical, reusable pieces, we can really get to understand how to refactor it. Of course, it is extra work, but it’s part of the development process.
+
+
+---
+# Don’t Repeat Yourself (DRY)
+
+
+### 👉 Wrap It in a Function
+
+.pull-left[
+
+&lt;div class="info-box"&gt;
+  &lt;i&gt;🦜&lt;/i&gt; Repeating the same code multiple times increases the risk of errors, bloats scripts, and makes maintenance harder. The DRY principle encourages you to write logic once and reuse it via functions. This makes your code cleaner, easier to test, and more maintainable.
+&lt;/div&gt;
+
 
 
 ]
 
 .pull-right[
 
-```{bash
-Package: TestPackage
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Authors@R: c(
-    person(
-      "Jane", "Doe",
-      email = "jane@example.com",
-      role = c("aut", "cre")
-    )
-  )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
-License: What license is it under?
-Encoding: UTF-8
-LazyData: true
 
+``` r
+library(gapminder)
+library(dplyr)
+
+# Filter for Germany in 2007
+germany_2007 &lt;- gapminder |&gt;
+  filter(country == "Germany", year == 2007) |&gt;
+  select(country, year, lifeExp, gdpPercap)
+
+# Filter for Japan in 2007
+japan_2007 &lt;- gapminder |&gt;
+  filter(country == "Japan", year == 2007) |&gt;
+  select(country, year, lifeExp, gdpPercap)
+
+# Filter for France in 2007
+# And so on ...
 ```
 
 
@@ -267,9 +624,183 @@ LazyData: true
 
 
 
+---
+# Don’t Repeat Yourself II
+
+- Turn repeated code into parameterized functions to save time and avoid bugs.
+
+
+``` r
+slice_gapminder &lt;- function(data, country, year) {
+  data |&gt;
+    dplyr::filter(country == !!country, year == !!year) |&gt;
+    dplyr::select(country, year, lifeExp, gdpPercap)
+}
+```
+
+Now it's clean and reusable:
+
+
+``` r
+japan_2007 &lt;- slice_gapminder(gapminder, "Japan", 2007)
+japan_2007
+```
+
+```
+## # A tibble: 1 × 4
+##   country  year lifeExp gdpPercap
+##   &lt;fct&gt;   &lt;int&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Japan    2007    82.6    31656.
+```
+
+Creating a function does not imply that we are ready yet.
+
+---
+# Don’t Repeat Yourself III
+
+There is another very common blind spot when we apply functions:
+
+
+``` r
+# Coding is hard work
+japan_2002 &lt;- slice_gapminder(gapminder, "Japan", 2002)
+germany_2002 &lt;- slice_gapminder(gapminder, "Germany", 2002)
+france_2002 &lt;- slice_gapminder(gapminder, "France", 2002)
+```
+
+👉 Functions itself do not solve the problem of repetition if we call them repeatedly with only slight variations. 
+
+
+---
+# Base R against DRY
+
+
+``` r
+# Define inputs
+countries &lt;- c("Japan", "Germany", "France")
+years &lt;- rep(2002, length(countries))
+
+# Apply the function to both vectors using mapply()
+results_list &lt;- mapply(function(country, year) {
+  slice_gapminder(gapminder, country, year)
+}, countries, years, SIMPLIFY = FALSE)
+
+# Combine the list of data frames into one
+results &lt;- do.call(rbind, results_list)
+results
+```
+
+```
+## # A tibble: 3 × 4
+##   country  year lifeExp gdpPercap
+## * &lt;fct&gt;   &lt;int&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Japan    2002    82      28605.
+## 2 Germany  2002    78.7    30036.
+## 3 France   2002    79.6    28926.
+```
 
 
 
+
+---
+## Say Hello to *Purrr*
+
+.pull-left[
+
+&lt;div class="info-box"&gt;
+  &lt;i&gt;🦜&lt;/i&gt; The purrr package helps you avoid such repetitive code (Wickham and Henry 2025). The package is part of the tidyverse and provides a consistent, readable way to perform iteration in R. Instead of writing loops or repeating function calls manually, purrr lets you apply functions over lists, vectors, or data frames using a family of tools like map(), map2(), and pmap.
+&lt;/div&gt;
+
+
+]
+
+.pull-right[
+&lt;figure&gt;
+    &lt;a href="https://purrr.tidyverse.org" target="_blank"&gt;&lt;img src="https://purrr.tidyverse.org/logo.png" alt="purrr.tidyverse.org" width="55%" align="center"/&gt;
+&lt;/figure&gt;
+]
+
+
+
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+## Purrr against DRY
+
+
+
+``` r
+# Use purrr to iterate over countries and years
+library(purrr)
+
+# Extract the data for multiple countries and a specific year
+countries &lt;- c("Japan", "Germany", "France")
+years &lt;- rep(2002, length(countries))
+
+# Map2 to apply the function across both vectors
+results &lt;- map2(countries, years, ~ slice_gapminder(gapminder, .x, .y))
+
+# Map2 returns a list, so we can bind the results
+results |&gt; dplyr::bind_rows()
+```
+
+```
+## # A tibble: 3 × 4
+##   country  year lifeExp gdpPercap
+##   &lt;fct&gt;   &lt;int&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Japan    2002    82      28605.
+## 2 Germany  2002    78.7    30036.
+## 3 France   2002    79.6    28926.
+```
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+## Purrr agains DRY
+
+- As outlined, you don’t need purrr to avoid repetition – you can achieve similar results using base R functions like `sapply()` and other *apply* variants. 
+
+=&gt; This can be useful if you want to reduce dependencies or keep your code lightweight.
+
+- However, purrr offers a more consistent and readable syntax, especially when working within the tidyverse ecosystem. Its functions are designed to work seamlessly with tibbles and dplyr verbs, making it easier to integrate into data analysis workflows.
+
+- Purrr has further goodies like:
+  - Progress bars
+  - Parallel computing
+  
+## 👉 Purrr your way and DRY!
+
+
+---
+background-image: url("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExa3JkNnRydTJqdjNyNXlmMWd4MXRmeWkybzZ6eWdvaDc4amViejZ1eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/10YHLXWAUpGUZq/giphy.gif")
+background-size: cover
+class: bottom, center
+
+
+# .red[Keep your version under control] 
+
+&lt;div class="remark-footer"&gt;&lt;a href="https://giphy.com/gifs/love-batman-heart-10YHLXWAUpGUZq" target="_blank" style="color: black;"&gt;Source: adeanormal&lt;/a&gt;&lt;/div&gt;
+
+
+---
+background-image: url(https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png)
+background-position: 90% 5%
+background-size: 8%
+
+## 01: Git(Hub)
+
+### Track changes over time
+
+&lt;figure&gt;
+    &lt;a href="https://r-pkgs.org" target="_blank"&gt;&lt;img src="https://edgar-treischl.github.io/slidesGit/images/Fig_0901.png" alt="www.edgar-treischl.de" width="95%"/&gt;
+&lt;/figure&gt;
 
 
 ---
@@ -377,535 +908,6 @@ lintr::lint_package()
 
 
 
-
-
-
-
-
----
-background-image: url(https://usethis.r-lib.org/logo.png)
-background-position: 90% 5%
-background-size: 8%
-## 02: Github Actions
-
-.pull-left[
-
-Continuous Integration/Continuous Deployment:
-
-1. *Reliability via Automated Testing*: We can automatically run tests on every commit, ensuring that code changes don't break functionality.
-
-2. *Consistent Environments*: CI/CD pipelines define reproducible environments, ensuring that the code runs the same way on every machine, regardless the local setup.
-
-3. *Effortless Deployment*: With GitHub Actions, you can automate the deployment of R Markdown reports, Shiny apps, R packages, and so on.
-
-]
-
-.pull-right[
-
-```yaml
-# Workflow from: https://github.com/r-lib/actions/tree/v2/examples
-
-on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
-
-name: R-CMD-check
-
-jobs:
-  R-CMD-check:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_KEEP_PKG_SOURCE: yes
-    steps:
-      - uses: actions/checkout@v3
-
-...
-```
-
-]
-
-
----
-background-image: url(https://usethis.r-lib.org/logo.png)
-background-position: 90% 5%
-background-size: 8%
-
-## 02: Github Actions and usethis
-
-
-
-Usethis has predefined workflows for:
-
-
-``` r
-usethis::use_github_action()
-
-# Which action do you want to add? (0 to exit)
-# (See &lt;https://github.com/r-lib/actions/tree/v2/examples&gt; for other options) 
-# 
-# 1: check-standard: Run `R CMD check` on Linux, macOS, and Windows
-# 2: test-coverage: Compute test coverage and report to https://about.codecov.io
-# 3: pr-commands: Add /document and /style commands for pull requests
-```
-
-
----
-background-image: url("https://i.gifer.com/8Bx3.gif")
-background-size: cover
-class: bottom, center
-
-# .black[... but don't forget to test 👻] 
-
-
-&lt;div class="remark-footer"&gt;&lt;a href="https://gifer.com/de/8Bx3" target="_blank" style="color: black;"&gt;Source: Gifer&lt;/a&gt;&lt;/div&gt;
-
----
-background-image: url(https://testthat.r-lib.org/logo.png)
-background-position: 90% 5%
-background-size: 8%
-## 02: testthat
-
-&lt;br/&gt;
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; "Testing your code can be painful and tedious, but it greatly increases the quality of your code. testthat tries to make testing as fun as possible, so that you get a visceral satisfaction from writing tests. Testing should be addictive, so you do it all the time. (Wickham 2011)"
-&lt;/div&gt;
-
-&lt;br/&gt;
-
-.pull-left[
-
-
-``` r
-#Set up the test infrastructure
-# And build a test
-usethis::use_test("name")
-```
-
-]
-
-.pull-right[
-
-&lt;img src="images/testRStudio.png" style="width: 90%"/&gt;
-
-]
-
-
----
-background-image: url(https://covr.r-lib.org/reference/figures/logo.png)
-background-position: 90% 5%
-background-size: 8%
-## 02: covr
-
-
-.panelset[
-
-.panel[.panel-name[Test Coverage]
-
-.pull-left[
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜️&lt;/i&gt;"Track test coverage for your R package and view reports locally or (optionally) upload the results to codecov or coveralls. (Hester 2023)"
-&lt;/div&gt;
-
-
-``` r
-# Inspect the test coverage
-covr::report()
-```
-
-
-]
-.pull-right[
-
-&lt;img src="images/covr1.png" style="width: 90%"/&gt;
-
-]
-
-
-]
-
-
-.panel[.panel-name[Tracked Source]
- &lt;img src="images/covr.png" style="width: 90%"/&gt;
-]
-
-]
-
-
-
-
-
----
-background-image: url(https://i.gifer.com/15X0.gif)
-background-size: cover
-class: bottom, center
-
-
-## .red[Documentation]
-
-&lt;div class="remark-footer"&gt;&lt;a href="https://www.sarah-johnson.com/personal-art" target="_blank" style="color: black;"&gt;Source: Sarah Johnson&lt;/a&gt;&lt;/div&gt;
-
-
----
-background-image: url(https://roxygen2.r-lib.org/logo.png)
-background-position: 90% 5%
-background-size: 8%
-## 03 Document: roxygen2
-
-.pull-left[
-
-### Describe your functions and ...
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜️&lt;/i&gt; "... roxygen2 will process your source code and comments to automatically generate .Rd files in man/, NAMESPACE, and, if needed, the Collate field in DESCRIPTION.". (Wickham and Csárdi 2024)
-&lt;/div&gt;
-
-
-
-- Help files for your functions will be available
-
-- The pkgdown package will use the roxygen2 comments to create a website for your package
-
-]
-
-.pull-right[
-
-
-
-``` r
-#' Function title
-#' 
-#' @description What does this `add` function.
-#' 
-#' @param x Function parameter.
-#' @param y Function parameter.
-#'
-#' @return A number.
-#'
-#' @examples
-#' add(1, 1)
-
-#' @export
-add &lt;- function(x, y) {
-  x + y
-}
-```
-
-]
-
-
-
-
-
----
-
-## 03 Document: pkgdown
-
-.pull-left[
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜️&lt;/i&gt; "The goal of pkgdown is to make it easy to make an elegant and useful package website with a minimum of work. You can get a basic website up and running in just a couple of minutes. If you’re using GitHub, we recommend setting up pkgdown and GitHub actions to automatically build and publish your site". (Wickham et al. 2024)
-&lt;/div&gt;
-
-
-]
-
-.pull-right[
-&lt;figure&gt;
-    &lt;a href="https://pkgdown.r-lib.org" target="_blank"&gt;&lt;img src="https://pkgdown.r-lib.org/logo.png" alt="https://pkgdown.r-lib.org" width="50%" align="center"/&gt;
-&lt;/figure&gt;
-]
-
-&lt;br&gt;
-
-
-
-
-
-
-
-
----
-background-image: url(https://pkgdown.r-lib.org/logo.png)
-background-position: 90% 5%
-background-size: 8%
-
-## 03 Document: pkgdown
-&lt;br&gt;
-&lt;div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; max-width:97%;"&gt;
-  &lt;iframe src="https://pkgdown.r-lib.org" width="500" height="315" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-
----
-background-image: url(https://pkgdown.r-lib.org/logo.png)
-background-position: 90% 5%
-background-size: 8%
-
-## 03 Document: pkgdown
-
-### Create a pkgdown website via:
-
-.pull-left[
-
-
-``` r
-#usethis creates config file: =&gt; _pkgdown.yml config file
-usethis::use_pkgdown()
-
-#Build the website via:
-pkgdown::build_site()
-```
-
-### 🚀 via GitHub Actions:
-
-
-``` r
-#Add corresponding GHA to deploy each time you push to GitHub
-usethis::use_pkgdown_github_pages()
-```
-
-
-
-
-]
-
-.pull-right[
-
-```yaml
-# _pkgdown.yml
-url: https://edgar-treischl.github.io/ProjectX/
-template:
-  bootstrap: 5
-  bootswatch: litera
-  bslib:
-    base_font: {google: "Solway"}
-    heading_font: {google: "Solway"}
-navbar:
-...
-```
-
-
-]
-
-
-
-
-
----
-background-image: url("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnVmNnQzM2NzYWJuNDR5M2xoZGxtbnU4eWg2OWdsaWptMjVhMDg4dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l1J9JOEZqVI4JFEk0/giphy.gif")
-background-size: contain
-class: bottom, center
-
-
-
-&lt;br&gt;
-## .white[Deploy] 
-
-&lt;div class="remark-footer"&gt;&lt;a href="https://giphy.com/gifs/batman-robin-laundry-l1J9JOEZqVI4JFEk0" target="_blank" style="color: black;"&gt;Source: Threadless&lt;/a&gt;&lt;/div&gt;
-
----
-## 04: renv
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; "The renv package helps you create reproducible environments for your R projects. Use renv to make your R projects more isolated, portable and reproducible" (Ushey and Wickham 2024).
-&lt;/div&gt;
-
-.pull-left[
-
-- Isolated: Installing a new or updated package for one project won’t break your other projects, and vice versa.
-
-- Portable: Easily transport your projects from one computer to another, even across different platforms.
-
-- Reproducible: renv records the exact package versions you depend on, and ensures those exact versions are the ones that get installed." (Ushey and Wickham)
-
-]
-
-.pull-right[
-&lt;figure&gt;
-    &lt;a href="https://rstudio.github.io/renv/index.html" target="_blank"&gt;&lt;img src="https://rstudio.github.io/renv/logo.svg" alt="The renv package" width="65%"/&gt;
-&lt;/figure&gt;
-]
-
-
----
-background-image: url(https://rstudio.github.io/renv/logo.svg)
-background-position: 90% 5%
-background-size: 8%
-
-## 04: renv
-
-.pull-left[
-
-- Use `renv::init()` to initiate a new project:
-  - Gives you the power of isolation because it creates a project library 
-  - Creates a .Rprofile file to load the renv library as long as renv is active
-  - The package creates a renv.lock with metadata about every project package so that it can be installed on a new machine
-
-- Use `renv::snapshot()` to create a snapshot of the project environment
-
-- Use `renv::restore()` to restore the project environment
-
-
-
-
-
-]
-
-.pull-right[
-
-&lt;figure&gt;
-    &lt;a href="https://rstudio.github.io/renv/index.html" target="_blank"&gt;&lt;img src="https://rstudio.github.io/renv/articles/renv.png" alt="www.edgar-treischl.de" width="95%"/&gt;
-&lt;/figure&gt;
-
-
-]
-
-
----
-## 04: renv lockfile
-
-```shell
-  "R": {
-    "Version": "4.4.1",
-    "Repositories": [
-      {
-        "Name": "CRAN",
-        "URL": "https://cloud.r-project.org"
-      }
-    ]
-  },
-  "Packages": {
-    "markdown": {
-      "Package": "markdown",
-      "Version": "1.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "4584a57f565dd7987d59dda3a02cfb41"}
-    }
-```
-
-
-
-
-
-
----
-## 04: Docker
-
-.pull-left[
-
-Create, deploy, and run applications in containers:
-
-- Container: A standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
-
-- Dockerfile: A text document that contains all the commands a user could call on the command line to assemble an image.
-
-- Rocker: A project that provides different Docker images for R. Those bundles include the OS, R, (RStudio), and packages.
-
-
-]
-
-.pull-right[
-
-&lt;figure&gt;
-    &lt;a href="https://www.docker.com" target="_blank"&gt;&lt;img src="images/docker.png" width="95%"/&gt;
-&lt;/figure&gt;
-
-]
-
-
-
----
-background-image: url(https://rocker-project.org/img/rocker.png)
-background-position: 90% 5%
-background-size: 8%
-
-## 04: Docker and Rocker
-
-
-&lt;div class="info-box"&gt;&lt;i&gt;🦜&lt;/i&gt; The Rocker Project provides a collection of (Linux) containers suited for different needs. Find a base image to extend or images with popular software and optimized libraries pre-installed. (Rocker website) &lt;/div&gt;
-
-
-
-```shell
-# Use a base R image from rocker project (official R Docker image)
-FROM rocker/r-ver:4.4.1
-
-# Set a working directory in the container
-WORKDIR /app
-
-# Copy a simple R script into the container
-COPY hello.R .
-
-# Install necessary R packages (e.g., ggplot2)
-RUN R -e "install.packages(c('ggplot2'), repos='https://cloud.r-project.org/')"
-
-# Set the entry point to run the R script
-ENTRYPOINT ["Rscript", "hello.R"]
-  
-```
-
-
----
-## 04: sessioninfo
-
-
-``` r
-mysession &lt;- sessioninfo::session_info()
-mysession$platform
-```
-
-```
-##  setting  value
-##  version  R version 4.4.2 (2024-10-31)
-##  os       macOS Sequoia 15.6.1
-##  system   aarch64, darwin20
-##  ui       X11
-##  language (EN)
-##  collate  en_US.UTF-8
-##  ctype    en_US.UTF-8
-##  tz       Europe/Berlin
-##  date     2025-08-25
-##  pandoc   3.4 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/aarch64/ (via rmarkdown)
-##  quarto   1.6.39 @ /usr/local/bin/quarto
-```
-
-
-Set the parameter: `to_file = "session.log"`  to export a log file
-
-
----
-## 04: sessioninfo
-
-
-
-
-``` r
-sessioninfo::session_info(info = "external")
-```
-
-```bash
-═ Session info ═══════════════════════════════════════════════════════════════
-─ External software ──────────────────────────────────────────────────────────
- setting        value
- cairo          1.17.6
- cairoFT
- pango          1.50.14
- png            1.6.40
- jpeg           9.5
- tiff           LIBTIFF, Version 4.5.0
- tcl            8.6.13
- curl           8.7.1
- ...
-──────────────────────────────────────────────────────────────────────────────
-
-```
 
 
 
