@@ -148,18 +148,18 @@ You may copy, distribute, and use the slides in your own work, as long as you gi
 
 class: middle, center, inverse
 
-## Let's face the truth ...
+## Let's face the truth, develop code but ...
 
 
 
 
 ---
-background-image: url("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTNpOWh5ZmJsdnk1Mnh0OGYxNHhvajZwNzFzbHZoNWw4aXAyY2c4YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Qumf2QovTD4QxHPjy5/giphy.gif")
+background-image: url("images/beaker2.gif")
 background-size: cover
 class: bottom, center
 
 
-## .white[... develop, but get rid of bad habits first <br> `r emoji::emoji("smile")`] 
+# .white[Get rid of bad habits first <br> `r emoji::emoji("smile")`] 
 
 <div class="remark-footer"><a href="https://giphy.com/gifs/moodman-batman-smack-smacked-Qumf2QovTD4QxHPjy5" target="_blank" style="color: white;">Images source: MOODMAN</a></div>
 
@@ -255,11 +255,11 @@ knitr::purl()
 
 
 ---
-background-image: url("https://i.gifer.com/3wMh.gif")
+background-image: url("images/beaker1.gif")
 background-size: cover
 class: bottom, center
 
-## .white[Let's get dirty `r emoji::emoji("silly")`] 
+## .orange[Get rid of messy code `r emoji::emoji("silly")`] 
 
 
 
@@ -403,6 +403,13 @@ filter_and_round(mtcars, mpg_limit = 25)
 ```
 
 => This approach makes your code flexible, readable, and much easier to maintain. 
+
+---
+background-image: url("images/cookimonster.gif")
+background-size: cover
+class: bottom, center
+
+## .white[Break into nice bites `r emoji::emoji("silly")`] 
 
 ---
 # Modular Code
@@ -701,11 +708,11 @@ background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
 
-## Purrr agains DRY
+## Purrr against DRY
 
 - As outlined, you don’t need purrr to avoid repetition – you can achieve similar results using base R functions like `sapply()` and other *apply* variants. 
 
-=> This can be useful if you want to reduce dependencies or keep your code lightweight.
+- This can be useful if you want to reduce dependencies or keep your code lightweight.
 
 - However, purrr offers a more consistent and readable syntax, especially when working within the tidyverse ecosystem. Its functions are designed to work seamlessly with tibbles and dplyr verbs, making it easier to integrate into data analysis workflows.
 
@@ -713,32 +720,25 @@ background-size: 8%
   - Progress bars
   - Parallel computing
   
-## `r emoji::emoji("point_right")` Purrr your way and DRY!
+### `r emoji::emoji("point_right")` Purrr your way and DRY!
 
 
 ---
-background-image: url("https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExa3JkNnRydTJqdjNyNXlmMWd4MXRmeWkybzZ6eWdvaDc4amViejZ1eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/10YHLXWAUpGUZq/giphy.gif")
+background-image: url("images/beaker3.gif")
 background-size: cover
 class: bottom, center
 
-
-# .red[Keep your version under control] 
-
-<div class="remark-footer"><a href="https://giphy.com/gifs/love-batman-heart-10YHLXWAUpGUZq" target="_blank" style="color: black;">Source: adeanormal</a></div>
+# .white[Robust Code don't bite ... `r emoji::emoji("silly")`] 
 
 
 ---
-background-image: url(https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png)
-background-position: 90% 5%
-background-size: 8%
+background-image: url("images/gonzo.gif")
+background-size: cover
+class: bottom, center
 
-## 01: Git(Hub)
+# .white[Develop with style `r emoji::emoji("silly")`] 
 
-### Track changes over time
 
-<figure>
-    <a href="https://r-pkgs.org" target="_blank"><img src="https://edgar-treischl.github.io/slidesGit/images/Fig_0901.png" alt="www.edgar-treischl.de" width="95%"/>
-</figure>
 
 
 ---

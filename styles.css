@@ -79,11 +79,16 @@ blockquote.info-box {
   --white: #FFFFFF;
   --black: #272822;
   --red: #c1121f;
+  --orange: #f58220;
 }
 
 
 .red {
   color: var(--red);
+}
+
+.orange {
+  color: var(--orange);
 }
 
 /* Style for the footer section */
