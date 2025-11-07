@@ -732,6 +732,125 @@ class: bottom, center
 
 
 ---
+# Robust Code
+
+- A robust function behaves consistently: given the same input, it always returns the same output. This reliability starts with clearly defined inputs and outputs. 
+
+A function should receive all the data it needs through its arguments—and return its results explicitly. 
+
+- It should not rely on global variables or hidden dependencies. 
+
+-  when each function is a self-contained unit, it’s easier to reuse and combine across your analysis or pipeline. 
+
+- how to write functions that handle errors gracefully
+
+- avoid unintended side effects (like accidental data exports)
+
+- manage credentials securely
+
+
+---
+background-image: url(https://rlang.r-lib.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+# Handle Errors Gracefully
+
+.pull-left[
+
+Write code that anticipates problems and handles them in a way that doesn’t crash your script or leave the user guessing (defensive programming)
+
+- **Validating inputs**: check that function arguments meet expected criteria (e.g., correct type, range, format) before proceeding.
+
+- **Catching errors**: use tryCatch() to manage potential errors during execution.
+
+- **Helpful feedback**: when something goes wrong, provide clear, actionable error messages that guide the user on how to fix the issue.
+
+
+]
+
+.pull-right[
+
+#### Check required input: `rlang::check_required(name)`
+
+```{r, error=TRUE}
+# This function requires a name argument
+say_hello <- function(name) {
+  rlang::check_required(name)
+  
+  # Do a lot of steps before we greet
+  # Let user wait ;)
+  
+  return(paste("Hello", name, "!"))
+}
+
+say_hello()
+```
+
+]
+
+
+---
+background-image: url(https://rlang.r-lib.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+# Handle Errors Gracefully II
+
+
+.pull-left[
+
+The `cli` package provides functions to create consistent and informative messages, warnings, and errors in R.
+
+- Inform the user:
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+cli::cli_alert_info("Checking input type with rlang")
+```
+
+- Success message:
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+cli::cli_alert_success("Input type checked!")
+```
+
+
+
+]
+
+.pull-right[
+
+#### Abort if input is not a character: `rlang::is_character(name)`
+
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+# Validate input types with rlang
+say_hello <- function(name) {
+  abort_message <- "Say my name, say my name, `name` must be a character vector."
+  
+  if (!rlang::is_character(name)) {
+  cli::cli_abort(abort_message)
+    }
+  
+  return(paste("Hello", name, "!"))
+}
+
+say_hello(1)
+```
+
+]
+
+
+
+
+
+
+
+
+
+
+
+---
 background-image: url("images/gonzo.gif")
 background-size: cover
 class: bottom, center

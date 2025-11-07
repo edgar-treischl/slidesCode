@@ -122,7 +122,7 @@ You may copy, distribute, and use the slides in your own work, as long as you gi
 
 
 
-### 01 Bad Habits 🙉 
+### 01 Bad Habits 🙊 
 ### 02 Coding conventions 🚧
 ### 03 Develop with style and grace 😎
 
@@ -216,7 +216,7 @@ background-size: 8%
 
 ## R vs. Rmd
 
-### 🫰 Code lives in R, Code and Text in Rmd files
+### 👉 Code lives in R, Code and Text in Rmd files
 
 If you need to create a document from a source code, run:
 
@@ -437,7 +437,7 @@ background-image: url("images/cookimonster.gif")
 background-size: cover
 class: bottom, center
 
-## .white[Break into nice bites 😜] 
+## .white[Break into nice bites 🪿] 
 
 ---
 # Modular Code
@@ -794,6 +794,147 @@ class: bottom, center
 
 
 ---
+# Robust Code
+
+- A robust function behaves consistently: given the same input, it always returns the same output. This reliability starts with clearly defined inputs and outputs. 
+
+A function should receive all the data it needs through its arguments—and return its results explicitly. 
+
+- It should not rely on global variables or hidden dependencies. 
+
+-  when each function is a self-contained unit, it’s easier to reuse and combine across your analysis or pipeline. 
+
+- how to write functions that handle errors gracefully
+
+- avoid unintended side effects (like accidental data exports)
+
+- manage credentials securely
+
+
+---
+background-image: url(https://rlang.r-lib.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+# Handle Errors Gracefully
+
+.pull-left[
+
+Write code that anticipates problems and handles them in a way that doesn’t crash your script or leave the user guessing (defensive programming)
+
+- **Validating inputs**: check that function arguments meet expected criteria (e.g., correct type, range, format) before proceeding.
+
+- **Catching errors**: use tryCatch() to manage potential errors during execution.
+
+- **Helpful feedback**: when something goes wrong, provide clear, actionable error messages that guide the user on how to fix the issue.
+
+
+]
+
+.pull-right[
+
+#### Check required input: `rlang::check_required(name)`
+
+
+``` r
+# This function requires a name argument
+say_hello &lt;- function(name) {
+  rlang::check_required(name)
+  
+  # Do a lot of steps before we greet
+  # Let user wait ;)
+  
+  return(paste("Hello", name, "!"))
+}
+
+say_hello()
+```
+
+```
+## Error in `say_hello()`:
+## ! `name` is absent but must be supplied.
+```
+
+]
+
+
+---
+background-image: url(https://rlang.r-lib.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+# Handle Errors Gracefully II
+
+
+.pull-left[
+
+The `cli` package provides functions to create consistent and informative messages, warnings, and errors in R.
+
+- Inform the user:
+
+
+``` r
+cli::cli_alert_info("Checking input type with rlang")
+```
+
+```
+## ℹ Checking input type with rlang
+```
+
+- Success message:
+
+
+``` r
+cli::cli_alert_success("Input type checked!")
+```
+
+```
+## ✔ Input type checked!
+```
+
+
+
+]
+
+.pull-right[
+
+#### Abort if input is not a character: `rlang::is_character(name)`
+
+
+
+``` r
+# Validate input types with rlang
+say_hello &lt;- function(name) {
+  abort_message &lt;- "Say my name, say my name, `name` must be a character vector."
+  
+  if (!rlang::is_character(name)) {
+  cli::cli_abort(abort_message)
+    }
+  
+  return(paste("Hello", name, "!"))
+}
+
+say_hello(1)
+```
+
+```
+## Error in `say_hello()`:
+## ! Say my name, say my name, `name` must be a character vector.
+```
+
+]
+
+
+
+
+
+
+
+
+
+
+
+---
 background-image: url("images/gonzo.gif")
 background-size: cover
 class: bottom, center
@@ -897,7 +1038,7 @@ lintr::lint(text = 'myFunction &lt;- function(x, y) {
 
 
 
-There are even more goodies 🦹‍♂️ if you develop an R package:
+There are even more goodies 👎 if you develop an R package:
 
 
 ``` r
