@@ -129,9 +129,10 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 
 
-### 01 Bad Habits `r emoji::emoji("evil")` 
-### 02 Coding conventions `r emoji::emoji("construction")`
-### 03 Develop with style and grace `r emoji::emoji("sunglasses")`
+### 01 Bad Habits
+### 02 Clean Code
+### 03 Modular Code
+### 04 Maintain Code and Develop with Style
 
 
 
@@ -152,7 +153,7 @@ background-size: cover
 class: bottom, center
 
 
-# .white[Get rid of bad habits first <br> `r emoji::emoji("smile")`] 
+# .white[Get rid of bad habits <br> `r emoji::emoji("smile")`] 
 
 <div class="remark-footer"><a href="https://giphy.com/gifs/moodman-batman-smack-smacked-Qumf2QovTD4QxHPjy5" target="_blank" style="color: white;">Images source: MOODMAN</a></div>
 
@@ -259,7 +260,7 @@ class: bottom, center
 
 
 ---
-## 01: Write Clean Code
+## Write Clean Code
 
 ### Clean code prioritizes:
 
@@ -285,7 +286,14 @@ class: bottom, center
 
 ---
 
-## 01: Abandon absolute paths, they will break anyway
+class: middle, center, inverse
+
+## Abandon absolute paths, they will break anyway ...
+
+
+---
+
+## Abandon absolute paths, they will break anyway
 
 
 ```{r, eval=TRUE, error=TRUE}
@@ -312,14 +320,17 @@ here::here("data", "descriptive_title.csv")
 
 
 
+---
 
+class: middle, center, inverse
 
+## Avoid Hardcoding Values or I’ll Burn Your Code
 
 
 
 ---
 
-## Avoid Hardcoding Values or I’ll Burn Your Code
+## Avoid Hardcoding Values
 
 .pull-left[
 
@@ -360,7 +371,7 @@ mtcars |> mutate(mpg_rounded = round(mpg, 2))
 
 ---
 
-## AHV or I’ll Burn Your Code II
+## Avoid Hardcoding Values II
 
 
 ### Set parameters at the top of your file while developing ...
@@ -380,7 +391,7 @@ mtcars |>
 
 ---
 
-## AHV or I’ll Burn Your Code III
+## Avoid Hardcoding Values III
 
 ### Move it into a function with a default:
 
@@ -402,10 +413,11 @@ background-image: url("images/cookimonster.gif")
 background-size: cover
 class: bottom, center
 
-## .white[Break into nice bites `r emoji::emoji("silly")`] 
+## .white[Break ’em into nice bites `r emoji::emoji("silly")`] 
+
 
 ---
-# Modular Code
+## Modular Code
 
 ### `r emoji::emoji("point_right")` Each function should do one thing — and do it well
 
@@ -421,9 +433,17 @@ class: bottom, center
 - And when changes are needed, they’re easier to make since you only need to update one part of the codebase
 
 
+
 ---
 
-# Don’t Dump Everything in One Function
+class: middle, center, inverse
+
+## Don’t Dump Everything in One Function
+
+
+---
+
+## Don’t Dump Everything in One Function
 
 .pull-left[
 
@@ -460,7 +480,7 @@ plot(df$sqft, df$price_log)
 
 ---
 
-# Don’t Dump Everything in One Function
+## Don’t Dump Everything in One Function
 
 
 <div class="info-box">
@@ -476,7 +496,7 @@ plot(df$sqft, df$price_log)
 
 ---
 
-# Don’t Dump Everything in One Function
+## Don’t Dump Everything in One Function
 
 Break it down into smaller functions:
 
@@ -500,7 +520,7 @@ clean_data <- function(df) {
 
 ---
 
-# Don’t Dump Everything in One Function
+## Don’t Dump Everything in One Function
 
 => If the last code is saved in a file called `source.R`, you can source it and call the functions as needed.
 
@@ -525,7 +545,7 @@ plot_relationship(df_clean)
 
 ---
 
-# Don’t Dump Everything in One Function
+## Don’t Dump Everything in One Function
 
 
 If the code need to run in sequence, wrap them in a function that makes the workflow explicit.
@@ -549,7 +569,7 @@ run_job <- function(data_path) {
 
 
 ---
-# Don’t Repeat Yourself (DRY)
+## Don’t Repeat Yourself (DRY)
 
 
 ### `r emoji::emoji("point_right")` Wrap It in a Function
@@ -593,7 +613,7 @@ japan_2007 <- gapminder |>
 
 
 ---
-# Don’t Repeat Yourself II
+## Don’t Repeat Yourself II
 
 - Turn repeated code into parameterized functions to save time and avoid bugs.
 
@@ -615,7 +635,7 @@ japan_2007
 Creating a function does not imply that we are ready yet.
 
 ---
-# Don’t Repeat Yourself III
+## Don’t Repeat Yourself III
 
 There is another very common blind spot when we apply functions:
 
@@ -630,7 +650,7 @@ france_2002 <- slice_gapminder(gapminder, "France", 2002)
 
 
 ---
-# Base R against DRY
+## Base R against DRY
 
 ```{r}
 # Define inputs
@@ -726,7 +746,7 @@ class: bottom, center
 
 
 ---
-# Robust Code
+## Robust Code
 
 - A robust function behaves consistently: given the same input, it always returns the same output. This reliability starts with clearly defined inputs and outputs. 
 
@@ -748,7 +768,7 @@ background-image: url(https://rlang.r-lib.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
 
-# Handle Errors Gracefully
+## Handle Errors Gracefully
 
 .pull-left[
 
@@ -789,7 +809,7 @@ background-image: url(https://rlang.r-lib.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
 
-# Handle Errors Gracefully II
+## Handle Errors Gracefully II
 
 
 .pull-left[
@@ -842,7 +862,7 @@ background-image: url(https://rlang.r-lib.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
 
-# Handle Errors Gracefully III
+## Handle Errors Gracefully III
 
 
 .pull-left[
@@ -889,7 +909,7 @@ Sometimes, you need to handle errors that occur during execution, especially whe
 ---
 
 
-# tryCatch()
+## tryCatch()
 
 .pull-left[
 
@@ -957,7 +977,7 @@ result <- tryCatch({
 
 
 ---
-# tryCatch II
+## tryCatch II
 
 
 .pull-left[
@@ -1005,7 +1025,7 @@ result <- tryCatch(
 
 
 ---
-# try()
+## try()
 
 
 .pull-left[
@@ -1048,7 +1068,7 @@ if (inherits(result, "try-error")) {
 
 ---
 
-# Declare Side Effects
+## Declare Side Effects
 
 .pull-left[
 
@@ -1095,7 +1115,7 @@ myfun <- function(export = FALSE) {
 
 ---
 
-# Declare Side Effects II
+## Declare Side Effects II
 
 .pull-left[
 
@@ -1139,7 +1159,7 @@ myfun <- function(export = FALSE) {
 
 ---
 
-# Declare Side Effects III
+## Declare Side Effects III
 
 ### `r emoji::emoji("point_right")` Files should be exported in the working directory 
 
@@ -1166,7 +1186,7 @@ myfun <- function(export = FALSE, export_dir = "data") {
 
 
 ---
-# Manage Secrets Like a Grown-Up
+## Manage Secrets Like a Grown-Up
 
 - Hardcoding API keys, tokens, or environment-specific settings into the code might seem harmless — until the keys show up in the history, your teammates copy over your local paths, or an app fails because it’s pointing to your local environment
 
@@ -1202,9 +1222,9 @@ API_KEY <- Sys.getenv("API_KEY")
 
 
 ---
-# Manage Secrets Like a Grown-Up II
+## Manage Secrets Like a Grown-Up II
 
-The `.Renviron` approach works well for local development, but once it’s time to share the project, it’s time to level up your config game.
+The `.Renviron` approach works well for local development, but once it’s time to share the code, it’s time to level up your config game.
 
 
 ### For Project-Specific Secrets: dotenv 
@@ -1242,19 +1262,19 @@ key <- Sys.getenv("API_KEY")
 
 ]
 
-=> Hello config package!
+
 
 
 ---
-# Hello config
+## Hello config
+
+It’s a hassle to juggle different setups — secrets, file paths, and other settings — depending on whether you’re developing locally, testing, staging, or deploying to production. 
 
 .pull-left[
 
-- It’s a hassle to juggle different setups — secrets, file paths, and other settings — depending on whether you’re developing locally, testing, staging, or deploying to production. 
-
 - The `config` package lets you define multiple named environments (like default, dev, etc.) in a clean YAML file
 
-- The code just loads the correct configuration automatically, based on the current environment. 
+- The code just loads the correct configuration automatically, based on the current environment. All settings will be pulled from the appropriate section of the YAML file — no need to manually double-check; no need to rewrite part of your code.
 
 
 
@@ -1264,10 +1284,9 @@ key <- Sys.getenv("API_KEY")
 
 <figure>
   <a href="https://rstudio.github.io/config/index.html" target="_blank">
-    <img src="https://rstudio.github.io/config/logo.svg" alt="https://rstudio.github.io/config/" width="55%" align="center"/>
+    <img src="https://rstudio.github.io/config/logo.svg" alt="https://rstudio.github.io/config/" width="40%" align="center"/>
   </a>
 </figure>
-<br>
 
 ]
 
@@ -1276,7 +1295,7 @@ key <- Sys.getenv("API_KEY")
 <br>
 
 <div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> All settings will be pulled from the appropriate section — no need to manually double-check; no need to rewrite part of your code. Just switch the environment variable like you switch a light switch, and your code will adapt automatically.
+  <i>`r emoji::emoji("parrot")`</i> Just switch the environment variable like you switch a light switch, and your code will adapt automatically.
 </div>
 
 
@@ -1291,7 +1310,7 @@ key <- Sys.getenv("API_KEY")
 
 
 ---
-# Manage Secrets Like a Grown-Up III
+## Manage Secrets Like a Grown-Up III
 
 
 ### For Multi-Environment Settings: config 
@@ -1350,7 +1369,7 @@ config::get("db_address")
 
 
 ---
-# One Last Word of Caution
+## One Last Word of Caution
 
 ### `r emoji::emoji("point_right")` Don’t Commit These Files. Seriously.
 
@@ -1376,17 +1395,166 @@ config::get("db_address")
 
 ]
 
+---
+background-image: url("images/gonzo.gif")
+background-size: cover
+class: bottom, center
+
+# .white[Maintain Code and Develop with Style `r emoji::emoji("silly")`] 
+
+
+
+---
+## Maintain Code
+
+- *Version control* is the foundational practice for long-term maintainability (Branches, History, etc.)
+
+- *Code reviews* of new features or bugs help catch issues early, share knowledge across the team, and ensure that new code adheres to our standards
+
+- *Collaborative maintenance*—through comments, suggestions, or pair programming—helps ensure that the entire team feels ownership of the code and keeps it healthy for the long run
+
+- Code maintenance is an *ongoing process*:
+  - It’s not just about writing code that works today, but about ensuring it continues to work well as requirements evolve, dependencies change, and new team members join. 
+  - Regularly revisiting and refactoring code, updating dependencies, and improving tests are all part of keeping your codebase in good shape
+
+
+---
+## Take Your Time, Time to Refactor
+
+
+<div class="info-box">
+  <i>`r emoji::emoji("thought_balloon")`</i> “Refactoring is a process of changing a software system in such a way that it does not alter the external behavior of the code yet improves its internal structure.” (Martin Fowler, Refactoring: Improving the Design of Existing Code)
+</div>
+
+
+
+As your project grows, code that was once “good enough” can become fragile, repetitive, or hard to read even for yourself if you have enough distance from the project. 
+
+Refactoring gives you the opportunity to:
+
+- Remove duplication (apply DRY more effectively)
+- Improve modularity
+- Enhance readability and clarity (clearer intent, better naming,
+consistent style)
+- Make testing and debugging easier (well-structured code is easier to isolate and test)
+- Reduce technical debt (costs of choosing a quick or easy solution)
+
+
+---
+## The Tidyverse Style Guide
+
+#### `r emoji::emoji("point_right")`  We stick to the tidyverse style guide because it provides a widely accepted, well-documented, and actively maintained standard that aligns with modern R development practices. 
+
+.pull-left[
+
+- A clear, consistent style makes it easier to spot bugs, understand logic at a glance, and collaborate across a team.
+
+- The tidyverse style guide provides a clear, opinionated set of conventions for writing clean, consistent R code—covering everything from naming variables to how you should format pipes and function arguments.
+
+
+
+]
+
+
+
+.pull-right[
+
+<div class="info-box">
+  <i>`r emoji::emoji("parrot")`</i> By adopting this guide, we avoid the overhead of defining and maintaining our own custom rules; and we ensure that our code is immediately familiar to anyone experienced with the broader R community.
+
+
+</div>
+
+
+]
+
+
+
+
+
+
+
 
 
 
 
 
 ---
-background-image: url("images/gonzo.gif")
-background-size: cover
-class: bottom, center
+## The Tidyverse Style Guide II
 
-# .white[Develop with style `r emoji::emoji("silly")`] 
+
+.pull-left[
+
+-   *Use `snake_case` for all object and function names*: Use `get_user_data()`, not `GetUserData()`
+-   *Avoid abbreviations unless they are widely recognized*: Use `user_id`, not `u_id`
+-   *Use ALL_CAPS for constants and environment variables*: Use `API_KEY`, not `api_key`
+-   *Use descriptive, meaningful names*: Use `download_report()`, not `dl_rp()`
+-   *Function names should sound like actions (verbs)*: Use `fetch_ls_data()`, not `ls_data`
+-   *Variable names should sound like things (nouns)*: Use `user_list`, not `calculated_users`
+-   *Use consistent naming for related objects*: Use `create_data()` and `create_script()`
+-   *Name `.R` files to match their contents*: `read_data.R` contains `read_data()`
+
+
+
+]
+
+
+
+.pull-right[
+
+[![In that case: Artwork by Allison Horst](https://cdn.myportfolio.com/45214904-6a61-4e23-98d6-b140f8654a40/dbb99049-2916-4bc8-824f-1816f5c4f06d_rw_3840.png?h=5c28a07483856cd07de35a50c772824d)](https://allisonhorst.com/everything-else)  
+*Artwork: Allison Horst*
+
+
+]
+
+
+
+
+
+
+
+
+---
+background-image: url(https://github.com/r-lib/lintr/blob/main/man/figures/logo.png?raw=true)
+background-position: 90% 5%
+background-size: 8%
+
+
+## Hello Lintr
+
+The lintr package can automatically flag deviations from your style guide.
+
+.pull-left[
+
+<div class="info-box">
+  <i>`r emoji::emoji("parrot")`️</i>"lintr provides static code analysis for R. It checks for adherence to a given style, identifying syntax errors and possible semantic issues, then reports them to you so you can take action" (Hester et al. 2024).
+</div>
+
+
+]
+
+.pull-right[
+
+```{r}
+lintr::lint(text = 'myFunction <- function(x, y) {
+  if (sum(x, y) == 10) {
+    print("Sum is correct!")
+  }
+}')
+```
+
+]
+
+
+
+R Package goodie `r emoji::emoji("bad")`:
+
+```{r, eval=FALSE}
+#lintr::lint_dir(path = "R")
+lintr::lint_package()
+```
+
 
 
 
@@ -1396,7 +1564,9 @@ background-image: url(https://styler.r-lib.org/reference/figures/logo.png)
 background-position: 90% 5%
 background-size: 8%
 
-## 01: Develop With Style(r)
+## Hello Styler
+
+The styler package can reformat your code to match a consistent layout with a single command.
 
 
 .pull-left[
@@ -1423,8 +1593,7 @@ styler::style_text(
 
 ]
 
-
-There a goodies if you develop an R package:
+R Package goodie `r emoji::emoji("bad")`:
 
 ```{r, eval=FALSE}
 styler::style_pkg()
@@ -1436,45 +1605,8 @@ styler::style_pkg()
 
 
 
----
-background-image: url(https://github.com/r-lib/lintr/blob/main/man/figures/logo.png?raw=true)
-background-position: 90% 5%
-background-size: 8%
 
 
-## 01: Lintr
-
-
-
-.pull-left[
-
-<div class="info-box">
-  <i>`r emoji::emoji("parrot")`️</i>"lintr provides static code analysis for R. It checks for adherence to a given style, identifying syntax errors and possible semantic issues, then reports them to you so you can take action" (Hester et al. 2024).
-</div>
-
-
-]
-
-.pull-right[
-
-```{r}
-lintr::lint(text = 'myFunction <- function(x, y) {
-  if (sum(x, y) == 10) {
-    print("Sum is correct!")
-  }
-}')
-```
-
-]
-
-
-
-There are even more goodies `r emoji::emoji("bad")` if you develop an R package:
-
-```{r, eval=FALSE}
-#lintr::lint_dir(path = "R")
-lintr::lint_package()
-```
 
 
 
