@@ -9,7 +9,6 @@
 }
 
 /* styles.css */
-/* styles.css */
 
 /* Create a nice looking info box with emoji */
 .info-box {
@@ -123,6 +122,58 @@ blockquote.info-box {
 .footer-right {
   width: 50px;  /* Adjust width for GitHub logo */
   height: auto;
+}
+
+
+
+/* Title Slide */
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Proza+Libre&display=swap');
+
+
+
+/* Custom styling for the title slide */
+.title-slide {
+  background-image: url("images/kirmit_white.jpg");
+  background-position: right 1em bottom 0em;
+  background-size: 25%;
+  background-repeat: no-repeat;
+  background-color: #FEFFF1;
+  background-color: #FFF;
+}
+
+/* Style for the main title heading */
+.title-slide h1 {
+  font-family: 'Proza+Libre', serif;
+  font-size: 65px;
+  color: black;
+}
+
+/* Style for the author/subtitle */
+.title-slide h3 {
+  color: #962224; /* A deep red color */
+}
+
+/* Ensure links in the subtitle keep the same color */
+.title-slide h3 a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted #962224;
+}
+
+.title-slide h3 a:hover {
+  border-bottom: 1px solid #962224;
+}
+
+/* Styling for the footer text */
+.slide-footer {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 0.8em;
+  color: #962224;
 }
 
 

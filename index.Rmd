@@ -15,7 +15,8 @@ output:
       titleSlideClass: [center, middle]
 ---
 
-class: center, middle
+class: center, middle, title-slide
+
 
 
 
@@ -51,14 +52,14 @@ ui <- "- "
 
 ```{r best-features, echo=FALSE}
 #search
-xaringanExtra::use_search(show_icon = TRUE, position = "top-right")
+#xaringanExtra::use_search(show_icon = TRUE, position = "top-right")
 
 xaringanExtra::use_progress_bar(color = "#023047", location = "top")
 
-xaringanExtra::style_search(match_background = "black",
-                            input_background = "white",
-                            input_border = "black",
-                            match_current_background = "green")
+# xaringanExtra::style_search(match_background = "black",
+#                             input_background = "white",
+#                             input_border = "black",
+#                             match_current_background = "green")
 
 
 xaringanExtra::use_panelset()
@@ -95,31 +96,20 @@ meta() %>%
 ```
 
 
-  
-# Friends don't let friends ...
+```{r, results='asis', echo=FALSE}
+cat(readLines("github-corner.html"), sep = "\n")
+```
 
-## These slides are work in progress
+# Code Quality and Style
 
-.large[Dr. Edgar J. Treischl] <br>
-<a href="http://www.edgar-treischl.de" target="_blank">www.edgar-treischl.de</a>
-<br/>
-<br/>
-.large[Last update: `r Sys.Date()`]
-<br/>
-<br/>
-This presentation is licensed under a CC-BY-NC 4.0 license.
-You may copy, distribute, and use the slides in your own work, as long as you give attribution to the original author on each slide that you use. Commercial use of the contents of these slides is not allowed.
+### <a href="http://www.edgar-treischl.de" target="_blank">Dr. Edgar J. Treischl</a>
 
-<div class="remark-footer">
-  <!-- Left-aligned image -->
-  <img src="images/by-nceu.png" alt="Image left" width="150px" class="footer-left"/>
-  
-  <!-- Right-aligned GitHub logo -->
-  <a href="https://github.com/edgar-treischl/Workshop_reproducibleR" target="_blank">
-    <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" 
-         alt="GitHub logo" class="footer-right"/>
-  </a>
-</div>
+.white[Last update: `r Sys.Date()`]
+
+.footnote.slide-footer[
+  Press `r emoji::emoji("o")` or `r emoji::emoji("arrow_right")` to navigate
+]
+
 
 
 
@@ -129,6 +119,9 @@ You may copy, distribute, and use the slides in your own work, as long as you gi
   opacity: 0.5;
 }
 ```
+
+
+
 
 
 ---
@@ -824,7 +817,7 @@ cli::cli_alert_success("Input type checked!")
 
 
 ```{r, error=TRUE, message=TRUE, warining = TRUE}
-# Validate input types with rlang
+# Validate input with rlang
 say_hello <- function(name) {
   abort_message <- "Say my name, say my name, `name` must be a character vector."
   
