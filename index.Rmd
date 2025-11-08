@@ -651,12 +651,12 @@ results
 
 
 ---
-## Say Hello to *Purrr*
+## Hello Purrr
 
 .pull-left[
 
 <div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> The purrr package helps you avoid such repetitive code (Wickham and Henry 2025). The package is part of the tidyverse and provides a consistent, readable way to perform iteration in R. Instead of writing loops or repeating function calls manually, purrr lets you apply functions over lists, vectors, or data frames using a family of tools like map(), map2(), and pmap.
+  <i>`r emoji::emoji("parrot")`</i> The purrr package helps you avoid such repetitive code (Wickham and Henry 2025). The package is part of the tidyverse and provides a consistent, readable way to perform iteration in R. Instead of writing loops or repeating function calls manually, purrr lets you apply functions over lists, vectors, or data frames using a family of tools like *map*, *map2*, and *pmap*.
 </div>
 
 
@@ -665,6 +665,7 @@ results
 .pull-right[
 <figure>
     <a href="https://purrr.tidyverse.org" target="_blank"><img src="https://purrr.tidyverse.org/logo.png" alt="purrr.tidyverse.org" width="55%" align="center"/>
+    </a>
 </figure>
 ]
 
@@ -798,13 +799,13 @@ The `cli` package provides functions to create consistent and informative messag
 - Inform the user:
 
 ```{r, error=TRUE, message=TRUE, warining = TRUE}
-cli::cli_alert_info("Checking input type with rlang")
+cli::cli_alert_info("I am an info!")
 ```
 
 - Success message:
 
 ```{r, error=TRUE, message=TRUE, warining = TRUE}
-cli::cli_alert_success("Input type checked!")
+cli::cli_alert_success("I am gold.")
 ```
 
 
@@ -819,7 +820,7 @@ cli::cli_alert_success("Input type checked!")
 ```{r, error=TRUE, message=TRUE, warining = TRUE}
 # Validate input with rlang
 say_hello <- function(name) {
-  abort_message <- "Say my name, say my name, `name` must be a character vector."
+  abort_message <- "`name` must be a string."
   
   if (!rlang::is_character(name)) {
   cli::cli_abort(abort_message)
@@ -980,21 +981,21 @@ Here’s a breakdown of how it works in last example:
 .pull-right[
 
 ```{r, error=TRUE, message=TRUE, warining = TRUE}
-# Attempt to read a file that may not exist
+# Attempt to read a file
 result <- tryCatch(
   {
     readRDS("not_a_real_file.rds")
   },
   warning = function(w) {
-    cli::cli_warn("A warning occurred: {conditionMessage(w)}")
-    invokeRestart("muffleWarning")  # suppress further warning output
+    cli::cli_warn("Warning: {conditionMessage(w)}")
+    invokeRestart("muffleWarning") #suppress further warning
   },
   error = function(e) {
-    cli::cli_alert_danger("An error occurred: {conditionMessage(e)}")
+    cli::cli_alert_danger("Error: {conditionMessage(e)}")
     NULL  # return fallback value
   },
   finally = {
-    cli::cli_alert_info("Finished attempting risky operation.")
+    cli::cli_alert_info("Finished.")
   }
 )
 ```
@@ -1037,12 +1038,344 @@ if (inherits(result, "try-error")) {
   cli::cli_alert_success(
     "File read successfully!"
     )
-  # Continue processing with result
+  # Continue processing ...
 }
 ```
 
 
 ]
+
+
+---
+
+# Declare Side Effects
+
+.pull-left[
+
+- Don’t just insert code that exports data: This is not a good practice, actually it’s rude.
+
+- The next example is really a bad practice because such a code snippet will overwrite the file if it already exists:
+
+```{r, eval=FALSE}
+# Using an export step somewhere 
+# in the code is not a good practice
+fwrite(tmp.orig.from,
+  "../data.csv",
+  sep = ";",
+  dec = ","
+)
+```
+
+
+]
+
+.pull-right[
+
+- Create a function that takes into consideration whether to export the data or not!
+
+```{r, eval=FALSE}
+# Make the export explicit and conditional
+myfun <- function(export = FALSE) {
+  data <- "Hello World"
+  
+  if (export) {
+    fwrite(tmp.orig.from, 
+           "../data.csv",
+           sep = ";",
+           dec = ",")
+  }else {
+    return(data)
+  }
+}
+```
+
+
+]
+
+
+---
+
+# Declare Side Effects II
+
+.pull-left[
+
+- Ask for Permission:
+
+```{r, eval=FALSE}
+usethis::ui_yeah("Shall I export the data?")
+
+#> Shall I export the data?
+#> 
+#> 1: Negative
+#> 2: Absolutely not
+#> 3: Definitely
+#> 
+#> Selection: 3
+#> [1] TRUE
+```
+
+
+]
+
+.pull-right[
+
+- By asking about permission, the user is in control of their environment:
+
+```{r, eval=FALSE}
+# Ask for permission before exporting
+myfun <- function(export = FALSE) {
+  
+  # Shall we export?
+  yeah_export <- usethis::ui_yeah("Shall I export the data?")
+
+  if (yeah_export) {
+    export_data()
+  }
+}
+```
+
+]
+
+
+---
+
+# Declare Side Effects III
+
+### `r emoji::emoji("point_right")` Files should be exported in the working directory 
+
+
+
+If the file needs to be exported to a different location, insert the path in the function call. This way, the path is not hard codeded and can be adjusted. 
+
+```{r, eval=FALSE}
+# Respect the user, export only when asked, and allow to set the path
+myfun <- function(export = FALSE, export_dir = "data") {
+  
+  if (export) {
+    export_path <- fs::path(export_dir, "data.csv")
+    data.table::fwrite(data, export_path)
+    cli::cli_alert_success("Exported data to {export_path}")
+  } else {
+    return(data)
+  }
+}
+```
+
+### `r emoji::emoji("point_right")` Export only when asked and inform the user about it
+
+
+
+---
+# Manage Secrets Like a Grown-Up
+
+- Hardcoding API keys, tokens, or environment-specific settings into the code might seem harmless — until the keys show up in the history, your teammates copy over your local paths, or an app fails because it’s pointing to your local environment
+
+- In case of GitLab, a secret in the code is visible to anyone with access — forever — even if you delete it later
+
+### For Machine-Level Secrets: .Renviron
+
+.pull-left[
+
+
+- The usethis package provides a handy function to open and edit your `.Renviron` file — a config file that’s automatically loaded every time R starts. 
+
+- It’s a great place to store personal, local secrets, or paths that shouldn’t be shared
+
+
+]
+
+.pull-right[
+
+
+```{r, eval=FALSE}
+# Open your .Renviron file
+usethis::edit_r_environ()
+
+# Add a Key
+API_KEY=sk_abc123
+
+# Access it in your code
+API_KEY <- Sys.getenv("API_KEY")
+```
+
+]
+
+
+---
+# Manage Secrets Like a Grown-Up II
+
+The `.Renviron` approach works well for local development, but once it’s time to share the project, it’s time to level up your config game.
+
+
+### For Project-Specific Secrets: dotenv 
+
+
+.pull-left[
+
+
+- The `dotenv` package lets you keep environment variables in a project-specific `.env` file
+
+- This approach is perfect when settings vary by project, or when you’re working in a team where everyone has different credentials, file paths, or environments
+
+An example .env file looks like this:
+
+```bash
+OPENAI_API_KEY=sk_project_specific_key
+```
+
+
+
+]
+
+.pull-right[
+
+- You can access these secrets after running the `load_dot_env()` function. 
+
+- The function reads the `.env` file and sets the variables as environment variables for your session:
+
+
+```{r, eval=FALSE}
+# Load and access the secret
+dotenv::load_dot_env()
+key <- Sys.getenv("API_KEY")
+```
+
+]
+
+=> Hello config package!
+
+
+---
+# Hello config
+
+.pull-left[
+
+- It’s a hassle to juggle different setups — secrets, file paths, and other settings — depending on whether you’re developing locally, testing, staging, or deploying to production. 
+
+- The `config` package lets you define multiple named environments (like default, dev, etc.) in a clean YAML file
+
+- The code just loads the correct configuration automatically, based on the current environment. 
+
+
+
+]
+
+.pull-right[
+
+<figure>
+  <a href="https://rstudio.github.io/config/index.html" target="_blank">
+    <img src="https://rstudio.github.io/config/logo.svg" alt="https://rstudio.github.io/config/" width="55%" align="center"/>
+  </a>
+</figure>
+<br>
+
+]
+
+
+
+<br>
+
+<div class="info-box">
+  <i>`r emoji::emoji("parrot")`</i> All settings will be pulled from the appropriate section — no need to manually double-check; no need to rewrite part of your code. Just switch the environment variable like you switch a light switch, and your code will adapt automatically.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+---
+# Manage Secrets Like a Grown-Up III
+
+
+### For Multi-Environment Settings: config 
+
+
+.pull-left[
+
+
+
+An example `config.yml` file is displayed on the right
+
+```YAML
+default:
+  db_address: "101.166.44.311"
+  data_dir: "data/test"
+  enable_cache: false
+
+test:
+...
+
+production:
+  db_address: "101.166.44.313"
+  data_dir: "/results"
+  enable_cache: true
+```
+
+
+
+
+
+
+
+]
+
+.pull-right[
+
+After you added the config file, call the config package. It uses the default section from the `config.yml` file:
+
+
+
+```{r, eval=FALSE}
+config::get("db_address")
+#> "101.166.44.311"
+```
+
+To switch environments, set the `R_CONFIG_ACTIVE` environment variable accordingly. 
+
+```{r, eval=FALSE}
+Sys.setenv(R_CONFIG_ACTIVE = "production")
+config::get("db_address")
+#> "101.166.44.312"
+```
+
+
+]
+
+
+---
+# One Last Word of Caution
+
+### `r emoji::emoji("point_right")` Don’t Commit These Files. Seriously.
+
+
+.pull-left[
+
+- Once a key is added to a Git repository, it’s written into the project’s history — and even if you delete the line later, the damage is done.
+
+- Make sure sensitive files are ignored and exclude them before you start to add your keys or crendetials. 
+
+- Consider the appropriate ignore file and add the config.yml or .env file to it:
+  - .gitignore — for the Git setup
+  - .dockerignore — for Docker
+  - .Rbuildignore — for R packages
+
+]
+
+.pull-right[
+
+<figure>
+    <img src="images/kirmit_meme.jpg" alt="https://rstudio.github.io/config/" width="95%" align="center"/>
+</figure>
+
+]
+
 
 
 
