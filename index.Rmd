@@ -63,7 +63,7 @@ xaringanExtra::use_progress_bar(color = "#023047", location = "top")
 
 
 xaringanExtra::use_panelset()
-
+xaringanExtra::use_tile_view()
 xaringanExtra::use_clipboard()
 
 ```
@@ -836,8 +836,213 @@ say_hello(1)
 
 
 
+---
+background-image: url(https://rlang.r-lib.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+# Handle Errors Gracefully III
 
 
+.pull-left[
+
+- We can limit the input to a specific set of options, like a list of valid names or categories with the arg_match() function
+
+- Sometimes one tiny little letter is enough to make an mistake, but rlang has our back.
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+# Restrict input to specific options
+say_hello <- function(name = c("Tom", "Jerry")) {
+  
+  rlang::arg_match(name)
+  return(paste("Hello", name, "!"))
+}
+```
+
+
+
+]
+
+.pull-right[
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+say_hello(name = "Edgar")
+```
+
+
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+# Help users with typos
+say_hello(name = "Pom")
+```
+
+]
+
+
+
+<br>
+Sometimes, you need to handle errors that occur during execution, especially when dealing with external resources like files, databases, or APIs. This is where `tryCatch()` comes in.
+
+
+
+---
+
+
+# tryCatch()
+
+.pull-left[
+
+The function allows us to intercept and respond to errors, warnings, and other conditions without crashing the users interface. The tryCatch() function has several components:
+
+- `expr`: the code that is supposed to run
+- `error`: what to do if an error happens
+- `warning`: what to do if a warning happens
+- `finally`: code that always runs, no matter what
+
+
+
+]
+
+.pull-right[
+
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+result <- tryCatch({
+  warning("Something might be wrong")
+  x <- 10 / "a"
+  x
+}, warning = function(w) {
+  message("Warning: ", w$message)
+  0
+}, error = function(e) {
+  message("Error: ", e$message)
+  NA
+})
+
+print(result)
+
+```
+
+
+```{r, echo=FALSE, eval=FALSE}
+# The first line inside tryCatch triggers a warning => The last example returns 0, not NA => Both: withCallingHandlers
+result <- tryCatch({
+  withCallingHandlers({
+    warning("Something might be wrong")
+    x <- 10 / "a"
+    x
+  }, warning = function(w) {
+    message("Warning: ", w$message)
+  })
+}, error = function(e) {
+  message("Error: ", e$message)
+  NA
+})
+
+
+```
+
+
+
+]
+
+
+
+
+
+
+
+
+
+
+---
+# tryCatch II
+
+
+.pull-left[
+
+
+
+
+Here’s a breakdown of how it works in last example:
+
+- Warning handler: If a warning occurs during readRDS(), it will be caught and displayed using cli::cli_warn(). The warning is then muffled to prevent further output.
+
+- Error handler: If an error occurs, a custom error message is shown with cli::cli_alert_danger(), and NULL is returned as a fallback.
+- Finally: This code runs no matter what—whether there’s an error, a warning, or success. It’s useful for logging, cleanup, or confirming that the operation finished.
+
+
+
+
+
+]
+
+.pull-right[
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+# Attempt to read a file that may not exist
+result <- tryCatch(
+  {
+    readRDS("not_a_real_file.rds")
+  },
+  warning = function(w) {
+    cli::cli_warn("A warning occurred: {conditionMessage(w)}")
+    invokeRestart("muffleWarning")  # suppress further warning output
+  },
+  error = function(e) {
+    cli::cli_alert_danger("An error occurred: {conditionMessage(e)}")
+    NULL  # return fallback value
+  },
+  finally = {
+    cli::cli_alert_info("Finished attempting risky operation.")
+  }
+)
+```
+
+
+]
+
+
+---
+# try()
+
+
+.pull-left[
+
+- Use `try()` if you don’t need detailed error handling logic but still want graceful failure: 
+
+- It catches errors and continues running. The function runs the given expression, but if an error happens, it catches that error as an object instead of stopping the function.
+
+- Using the `silent` option keeps the default error message from showing, so you can handle the problem silently.
+
+- As a second step, the code checks if an error occurred with `inherits(result, "try-error")`. Inherits checks if the result is of class try-error, which indicates that an error was caught. In case of an error, we can handle it gracefully.
+
+
+
+]
+
+.pull-right[
+
+```{r, error=TRUE, message=TRUE, warining = TRUE}
+# Please don't stop ... on error
+result <- try(readRDS("file.rds"), 
+              silent = TRUE)
+
+# Check if it worked
+if (inherits(result, "try-error")) {
+  cli::cli_abort(
+    "The file could not be found."
+    )
+}else {
+  cli::cli_alert_success(
+    "File read successfully!"
+    )
+  # Continue processing with result
+}
+```
+
+
+]
 
 
 

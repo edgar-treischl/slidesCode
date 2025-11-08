@@ -7,6 +7,8 @@
     <script src="libs/xaringanExtra-progressBar/progress-bar.js"></script>
     <link href="libs/panelset/panelset.css" rel="stylesheet" />
     <script src="libs/panelset/panelset.js"></script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
     <script src="libs/clipboard/clipboard.min.js"></script>
     <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
     <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
@@ -99,7 +101,7 @@ class: center, middle, title-slide
 
 
 
-### 01 Bad Habits 🦹 
+### 01 Bad Habits 🦹‍♀️ 
 ### 02 Coding conventions 🚧
 ### 03 Develop with style and grace 😎
 
@@ -193,7 +195,7 @@ background-size: 8%
 
 ## R vs. Rmd
 
-### 🤞 Code lives in R, Code and Text in Rmd files
+### 🫰 Code lives in R, Code and Text in Rmd files
 
 If you need to create a document from a source code, run:
 
@@ -225,7 +227,7 @@ background-image: url("images/beaker1.gif")
 background-size: cover
 class: bottom, center
 
-## .orange[Get rid of messy code 🪿] 
+## .orange[Get rid of messy code 😜] 
 
 
 
@@ -414,7 +416,7 @@ background-image: url("images/cookimonster.gif")
 background-size: cover
 class: bottom, center
 
-## .white[Break into nice bites 🪿] 
+## .white[Break into nice bites 😜] 
 
 ---
 # Modular Code
@@ -767,7 +769,7 @@ background-image: url("images/beaker3.gif")
 background-size: cover
 class: bottom, center
 
-# .white[Robust Code don't bite ... 😜] 
+# .white[Robust Code don't bite ... 👻] 
 
 
 ---
@@ -904,8 +906,236 @@ say_hello(1)
 
 
 
+---
+background-image: url(https://rlang.r-lib.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+# Handle Errors Gracefully III
 
 
+.pull-left[
+
+- We can limit the input to a specific set of options, like a list of valid names or categories with the arg_match() function
+
+- Sometimes one tiny little letter is enough to make an mistake, but rlang has our back.
+
+
+``` r
+# Restrict input to specific options
+say_hello &lt;- function(name = c("Tom", "Jerry")) {
+  
+  rlang::arg_match(name)
+  return(paste("Hello", name, "!"))
+}
+```
+
+
+
+]
+
+.pull-right[
+
+
+``` r
+say_hello(name = "Edgar")
+```
+
+```
+## Error in `say_hello()`:
+## ! `name` must be one of "Tom" or "Jerry", not "Edgar".
+```
+
+
+
+
+``` r
+# Help users with typos
+say_hello(name = "Pom")
+```
+
+```
+## Error in `say_hello()`:
+## ! `name` must be one of "Tom" or "Jerry", not "Pom".
+## ℹ Did you mean "Tom"?
+```
+
+]
+
+
+
+&lt;br&gt;
+Sometimes, you need to handle errors that occur during execution, especially when dealing with external resources like files, databases, or APIs. This is where `tryCatch()` comes in.
+
+
+
+---
+
+
+# tryCatch()
+
+.pull-left[
+
+The function allows us to intercept and respond to errors, warnings, and other conditions without crashing the users interface. The tryCatch() function has several components:
+
+- `expr`: the code that is supposed to run
+- `error`: what to do if an error happens
+- `warning`: what to do if a warning happens
+- `finally`: code that always runs, no matter what
+
+
+
+]
+
+.pull-right[
+
+
+
+``` r
+result &lt;- tryCatch({
+  warning("Something might be wrong")
+  x &lt;- 10 / "a"
+  x
+}, warning = function(w) {
+  message("Warning: ", w$message)
+  0
+}, error = function(e) {
+  message("Error: ", e$message)
+  NA
+})
+```
+
+```
+## Warning: Something might be wrong
+```
+
+``` r
+print(result)
+```
+
+```
+## [1] 0
+```
+
+
+
+
+
+
+]
+
+
+
+
+
+
+
+
+
+
+---
+# tryCatch II
+
+
+.pull-left[
+
+
+
+
+Here’s a breakdown of how it works in last example:
+
+- Warning handler: If a warning occurs during readRDS(), it will be caught and displayed using cli::cli_warn(). The warning is then muffled to prevent further output.
+
+- Error handler: If an error occurs, a custom error message is shown with cli::cli_alert_danger(), and NULL is returned as a fallback.
+- Finally: This code runs no matter what—whether there’s an error, a warning, or success. It’s useful for logging, cleanup, or confirming that the operation finished.
+
+
+
+
+
+]
+
+.pull-right[
+
+
+``` r
+# Attempt to read a file that may not exist
+result &lt;- tryCatch(
+  {
+    readRDS("not_a_real_file.rds")
+  },
+  warning = function(w) {
+    cli::cli_warn("A warning occurred: {conditionMessage(w)}")
+    invokeRestart("muffleWarning")  # suppress further warning output
+  },
+  error = function(e) {
+    cli::cli_alert_danger("An error occurred: {conditionMessage(e)}")
+    NULL  # return fallback value
+  },
+  finally = {
+    cli::cli_alert_info("Finished attempting risky operation.")
+  }
+)
+```
+
+```
+## ✖ An error occurred: no 'restart' 'muffleWarning' found
+```
+
+```
+## ℹ Finished attempting risky operation.
+```
+
+
+]
+
+
+---
+# try()
+
+
+.pull-left[
+
+- Use `try()` if you don’t need detailed error handling logic but still want graceful failure: 
+
+- It catches errors and continues running. The function runs the given expression, but if an error happens, it catches that error as an object instead of stopping the function.
+
+- Using the `silent` option keeps the default error message from showing, so you can handle the problem silently.
+
+- As a second step, the code checks if an error occurred with `inherits(result, "try-error")`. Inherits checks if the result is of class try-error, which indicates that an error was caught. In case of an error, we can handle it gracefully.
+
+
+
+]
+
+.pull-right[
+
+
+``` r
+# Please don't stop ... on error
+result &lt;- try(readRDS("file.rds"), 
+              silent = TRUE)
+
+# Check if it worked
+if (inherits(result, "try-error")) {
+  cli::cli_abort(
+    "The file could not be found."
+    )
+}else {
+  cli::cli_alert_success(
+    "File read successfully!"
+    )
+  # Continue processing with result
+}
+```
+
+```
+## Error:
+## ! The file could not be found.
+```
+
+
+]
 
 
 
@@ -916,7 +1146,7 @@ background-image: url("images/gonzo.gif")
 background-size: cover
 class: bottom, center
 
-# .white[Develop with style 🪿] 
+# .white[Develop with style 👻] 
 
 
 
