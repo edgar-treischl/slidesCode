@@ -76,7 +76,7 @@ class: center, middle, title-slide
 
 ### &lt;a href="http://www.edgar-treischl.de" target="_blank"&gt;Dr. Edgar J. Treischl&lt;/a&gt;
 
-.white[Last update: 2025-11-08]
+.white[Last update: 2025-11-09]
 
 .footnote.slide-footer[
   Press ⭕ or ➡️ to navigate
@@ -137,7 +137,7 @@ class: bottom, center
 
 - Ever had code that worked perfectly on your machine — but mysteriously breaks when someone else tries to run it?
 
-- Old objects in your global environment, packages from another project, or global options you tweaked and forgot about — they all linger like ghosts. 
+- Old objects in your global environment linger like ghosts: 
 
 
 
@@ -147,7 +147,7 @@ class: bottom, center
 important_setting &lt;- "production"
 
 # Previously loaded function from packages
-library(mypackage)
+library(CoolCats)
 
 # Changed global options
 options(stringsAsFactors = TRUE)  # Please don't do this in 2025
@@ -163,18 +163,18 @@ Your code may unknowingly rely on these leftovers. It runs perfectly on your mac
 
 .pull-left[
 
-- 🔁 Restart your R session, run your code from scratch (Ctrl + Shift + F10) and make it a habit
+- 🔁 Make it a Habit: Restart your R session and run your code from scratch (Ctrl + Shift + F10)
 
-- Do not save the workspace and do not load the workspace from an `.Rdata` file (Based on Bryan et al. 2021). 
+- Don't save the workspace and don't load the workspace from an `.Rdata` file 
 
-- It’s the only way to ensure your script actually works in a fresh, clean R session 
+- It’s the only way to ensure your code runs in a fresh, clean R session 
 
  
-#### The rm approach 🔫
+### Abandon the rm approach 🔫
 
-- `rm(list = ls())` deletes user-created objects from the global workspace.
+- `rm(list = ls())` deletes user-created objects from the global workspace
 
-- **But**: The script may break due to hidden dependencies on things you ran in this R process before you executed: Attached packages are not detached, changed options are not restored, working directory is untouched!
+- **But**: The code may break due to hidden dependencies: Attached packages are not detached, changed options are not restored, working directory is untouched!
 
 
 
@@ -196,26 +196,26 @@ background-size: 8%
 
 ## R vs. Rmd
 
-### 👇 Code lives in R, Code and Text in Rmd files
+### 🫰 Code lives in R, Code and Text in Rmd files
 
-If you need to create a document from a source code, run:
+If you need to create a document from an `.R` file, run:
 
 
 ``` r
-#spin converts an R script to an Rmd file
+# Spin converts an R script to an Rmd file
 knitr::spin("script.R")
 ```
 
-- Roxygen comments will be treated as text (more about that later)
-- Add yaml header to the script to control the output
+- Roxygen comments will be treated as text
+- Add a `YAML` header to the script to control the output
 
 
-If you need to extract the code from an Rmd file, run:
+If you need to extract the code from an `.Rmd` file, run:
 
 
 
 ``` r
-#Extracts R code chunks from Rmd files
+# Extracts R code chunks from Rmd files
 knitr::purl()
 ```
 
@@ -228,7 +228,7 @@ background-image: url("images/beaker1.gif")
 background-size: cover
 class: bottom, center
 
-## .orange[Get rid of messy code 😜] 
+## .orange[Write clean code, dude! 🪿] 
 
 
 
@@ -243,13 +243,13 @@ class: bottom, center
 - Simplicity
 - Clarity
 
-### Messy code often reveals itself through several common signs: 
+### Messy code often reveals itself: 
 
 - Long, complicated functions that try to do too much
 - Duplicated code scattered throughout scripts
 - Inconsistent naming that leaves you guessing what’s going on
-- Absolute paths
 - Hardcoded values
+- Absolute paths
 
 
 ---
@@ -258,12 +258,6 @@ class: bottom, center
 
 &lt;img src="images/drake.png" style="width: 65%"/&gt;
 
-
----
-
-class: middle, center, inverse
-
-## Abandon absolute paths, they will break anyway ...
 
 
 ---
@@ -274,14 +268,14 @@ class: middle, center, inverse
 
 ``` r
 # Don't:
-readr::read_csv("~/Documents/Berichte/orig/104_data.csv")
+readr::read_csv("~/Documents/reports/data/104_data.csv")
 ```
 
 ```
-## Error: '~/Documents/Berichte/orig/104_data.csv' does not exist.
+## Error: '~/Documents/reports/data/104_data.csv' does not exist.
 ```
 
-### ⚡ Ceate a project and use the `here` package:
+### ⚡ Create a project and use the `here` package:
 
 
 ``` r
@@ -296,13 +290,15 @@ here::here()
 
 
 ``` r
-# Create a path to the file
-here::here("data", "descriptive_title.csv")
+# Create a path to the file is a piece of cake
+here::here("data", "muppets_income.csv")
 ```
 
 ```
-## [1] "/Users/edgar/Develop/slides/slidesCode/data/descriptive_title.csv"
+## [1] "/Users/edgar/Develop/slides/slidesCode/data/muppets_income.csv"
 ```
+
+
 
 
 
@@ -311,40 +307,25 @@ here::here("data", "descriptive_title.csv")
 
 
 ---
-
-class: middle, center, inverse
 
 ## Avoid Hardcoding Values or I’ll Burn Your Code
 
-
-
----
-
-## Avoid Hardcoding Values
-
-.pull-left[
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; The pain begins if you forget to integrate those values as function parameters and later on your code becomes a mess to maintain.
-&lt;/div&gt;
+- The pain begins if you forget to integrate hard coded values as function parameters:
 
 
 
 ``` r
 library(dplyr)
-filtered_data &lt;- mtcars |&gt; filter(mpg &gt; 25)
+filtered_data &lt;- mtcars |&gt; 
+  filter(mpg &gt; 25)
 ```
 
-]
+### 🐸 This makes your code a mess to maintain
 
-.pull-right[
-
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; What if you want to filter by a different age? You’d have to search through your code to find every instance of 30 and change it — and probably forget values.
-&lt;/div&gt;
+- What if you need to filter a different value? You’d have to search through your code to find every instance of the hard coded value and change it — and you probably forget half of them.
 
 
-
+- Another one? Rounding hell in a large report:
 
 
 
@@ -352,9 +333,6 @@ filtered_data &lt;- mtcars |&gt; filter(mpg &gt; 25)
 # Hardcoded rounding is not bad, true?
 mtcars |&gt; mutate(mpg_rounded = round(mpg, 2))
 ```
-
-]
-
 
 
 
@@ -389,14 +367,14 @@ mtcars |&gt;
 ```
 
 
-- Once you start wrapping code into functions, pass those values as arguments — even if you don’t plan to change them right now. You’re future-proofing your code.
+- Once you start wrapping code into functions, pass values as arguments — even if you don’t plan to change them right now. You’re future-proofing your code.
 
 
 ---
 
 ## Avoid Hardcoding Values III
 
-### Move it into a function with a default:
+### Move it into a function (with a default):
 
 
 ``` r
@@ -420,7 +398,8 @@ filter_and_round(mtcars, mpg_limit = 25)
 ## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2        30.4
 ```
 
-=&gt; This approach makes your code flexible, readable, and much easier to maintain. 
+
+#### 👉 This approach makes your code flexible, readable, and much easier to maintain
 
 ---
 background-image: url("images/cookimonster.gif")
@@ -435,35 +414,29 @@ class: bottom, center
 
 ### 👉 Each function should do one thing — and do it well
 
-- Modularity means breaking your code into smaller, self-contained pieces—typically functions — where each one handles a specific task
+- Modularity means breaking your code into smaller, self-contained pieces — typically functions, where each one handles one specific task
 - Instead of writing one long script that tries to do everything, modular code splits the work into clear, manageable chunks
 
 
-### 👉 This makes your code easier to read, test, and develop
+### 👉 Modular code makes your code easier to read, test, and develop
 
 - Each piece can be understood and worked on independently
 - Reusable functions save time and reduce duplication
 - Testing is simpler because you can write small, focused tests instead of validating everything at once
-- And when changes are needed, they’re easier to make since you only need to update one part of the codebase
+- Changes easier to apply, since you only need to update one part of the codebase
 
 
 
 ---
-
-class: middle, center, inverse
-
-## Don’t Dump Everything in One Function
-
-
----
-
 ## Don’t Dump Everything in One Function
 
 .pull-left[
 
-- It’s tempting to just get everything working in a single function or a long R script — a pipeline that loads the data, cleans it, analyzes it, and spits out a plot or, more generally, the result.
+- It’s tempting to just get everything working in a single function or a long script — a pipeline that loads the data, cleans it, analyzes it, calls your mum, and spits out the result.
 
-- As soon as you need to tweak something, explain it to someone else, or reuse part of it, things get messy. Suddenly, you’re stuck picking apart a script that’s hard to read, hard to change, and the code may break.
+- As soon as you need to tweak something, explain it to someone else, or reuse part of it, things get messy. 
+
+Suddenly, you’re stuck picking apart a script that’s hard to read, hard to change, and the code may break.
 
 ]
 
@@ -490,22 +463,28 @@ plot(df$sqft, df$price_log)
 
 ]
 
-### Keep it simple, stupid! Don't violated the KISS 👄 principle
+### 💋 Keep it simple, stupid! Don't violate the KISS principle
 
 
 ---
 
 ## Don’t Dump Everything in One Function
 
+- At first glance, it might seem fine — but now imagine you want to reuse the cleaning logic in a different script. Or test how the model works on another dataset. Or change the plotting code without rerunning the model. 
 
-&lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; At first glance, it might seem fine — but now imagine you want to reuse the cleaning logic in a different script. Or test how the model works on another dataset. Or change the plotting code without rerunning the model. You’re stuck. Everything depends on everything else.
-&lt;/div&gt;
 
-&gt; Your next step is code modularization which means breaking your logic into small, focused functions that each do one thing. That’s called separation of concerns, and it’s what keeps your code from turning into a tangled mess of confusion. Do yourself a huge favour: break your code into logical, reusable pieces.
+### 🐸 You’re stuck. Everything depends on everything else.
 
-- Separate at least logically, for example, put function that belong to data preparation, analysis, and reporting into different functions.
-- If you want to organize your codebase, create separate R scripts (e.g., analyze.R, plot.R) that follow your internal logic — and define functions for each logical, reusable step.
+
+
+### 👉 Modularize Code: Break your code into logical, reusable pieces
+
+- Break your logic into small, focused functions that each do one thing. 
+
+- That’s called *separation of concerns*. Separate *at least* logically:
+  - Insert code that belong to data preparation, analysis, and reporting into *separate functions*
+  - Organize your codebase, create separate R scripts (e.g., analyze.R, plot.R) that follow your internal logic 
+  - Define functions for each logical, reusable step
 
 
 
@@ -513,7 +492,7 @@ plot(df$sqft, df$price_log)
 
 ## Don’t Dump Everything in One Function
 
-Break it down into smaller functions:
+### 🍪 Break ’em into nice bites ...
 
 ```r
 # source.R
@@ -530,14 +509,14 @@ clean_data &lt;- function(df) {
 ```
 
 
-#### ⚡ This approach still violates the single responsibility principle, but it’s a start!
+### ⚡ This approach is not a clean separation of concerns if your function does more than one thing, but it’s a start!
 
 
 ---
 
 ## Don’t Dump Everything in One Function
 
-=&gt; If the last code is saved in a file called `source.R`, you can source it and call the functions as needed.
+### 🍪 Save and source it ...
 
 
 ``` r
@@ -553,7 +532,7 @@ plot_relationship(df_clean)
 
 
 &lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; This version is better because it's modular, readable, and flexible. Want to swap in a new dataset? Easy. Want to test the clean_data function? Just do it, you are on fire.
+  &lt;i&gt;💡&lt;/i&gt; This version is better because it's modular, readable, and flexible. Want to swap in a new dataset? Easy. Want to test the clean_data function? Just do it, you are on fire!
 &lt;/div&gt;
 
 
@@ -564,7 +543,7 @@ plot_relationship(df_clean)
 ## Don’t Dump Everything in One Function
 
 
-If the code need to run in sequence, wrap them in a function that makes the workflow explicit.
+### The code need to run in sequence? Wrap it in a function
 
 
 ``` r
@@ -580,9 +559,11 @@ run_job &lt;- function(data_path) {
 }
 ```
 
-- It helps others understand how your code fits together
+- This make the workflow explicit: It helps others understand how your code fits together
 
 - Only after we break our code into logical, reusable pieces, we can really get to understand how to refactor it. Of course, it is extra work, but it’s part of the development process.
+
+#### Finally, you can build an R package for our source code 💋
 
 
 ---
@@ -594,7 +575,7 @@ run_job &lt;- function(data_path) {
 .pull-left[
 
 &lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; Repeating the same code multiple times increases the risk of errors, bloats scripts, and makes maintenance harder. The DRY principle encourages you to write logic once and reuse it via functions. This makes your code cleaner, easier to test, and more maintainable.
+  &lt;i&gt;💡&lt;/i&gt; Repeating the same code multiple times increases the risk of errors, bloats scripts, and makes maintenance harder. The DRY principle encourages you to write logic once and reuse it via functions. This makes your code cleaner, easier to test, and more maintainable.
 &lt;/div&gt;
 
 
@@ -605,8 +586,9 @@ run_job &lt;- function(data_path) {
 
 
 ``` r
-library(gapminder)
+# Some repetitive code ...
 library(dplyr)
+library(gapminder)
 
 # Filter for Germany in 2007
 germany_2007 &lt;- gapminder |&gt;
@@ -633,7 +615,7 @@ japan_2007 &lt;- gapminder |&gt;
 ---
 ## Don’t Repeat Yourself II
 
-- Turn repeated code into parameterized functions to save time and avoid bugs.
+Turn repeated code into parameterized functions to save time and avoid bugs
 
 
 ``` r
@@ -644,7 +626,7 @@ slice_gapminder &lt;- function(data, country, year) {
 }
 ```
 
-Now it's clean and reusable:
+### 👉 Clean and reusable:
 
 
 ``` r
@@ -659,12 +641,12 @@ japan_2007
 ## 1 Japan    2007    82.6    31656.
 ```
 
-Creating a function does not imply that we are ready yet.
+
 
 ---
 ## Don’t Repeat Yourself III
 
-There is another very common blind spot when we apply functions:
+Creating a function does not imply that we are ready yet. There is another very common blind spot:
 
 
 ``` r
@@ -674,7 +656,9 @@ germany_2002 &lt;- slice_gapminder(gapminder, "Germany", 2002)
 france_2002 &lt;- slice_gapminder(gapminder, "France", 2002)
 ```
 
-👉 Functions itself do not solve the problem of repetition if we call them repeatedly with only slight variations. 
+Functions itself do not solve the problem of repetition if we call them repeatedly with only slight variations. 
+
+### 👉 Base R and purrr help to avoid repetition
 
 
 ---
@@ -790,25 +774,25 @@ background-image: url("images/beaker3.gif")
 background-size: cover
 class: bottom, center
 
-# .white[Robust Code don't bite ... 😜] 
+# .white[Robust Code don't bite ... 👻] 
 
 
 ---
 ## Robust Code
 
-- A robust function behaves consistently: given the same input, it always returns the same output. This reliability starts with clearly defined inputs and outputs. 
+A robust function behaves consistently: given the same input, it always returns the same output. This reliability starts with clearly defined inputs and outputs. 
 
-A function should receive all the data it needs through its arguments—and return its results explicitly. 
+### 👉 A function should receive all it needs through its arguments — and return its results explicitly
 
-- It should not rely on global variables or hidden dependencies. 
+- It should *not rely* on *global variables* or *hidden dependencies*
 
--  when each function is a self-contained unit, it’s easier to reuse and combine across your analysis or pipeline. 
+-  When each function is a *self-contained unit*, it’s easier to reuse and combine across your analysis or pipeline
 
-- how to write functions that handle errors gracefully
+- Next:
 
-- avoid unintended side effects (like accidental data exports)
-
-- manage credentials securely
+  - How to handle errors gracefully
+  - How to avoid unintended side effects (like accidental data exports)
+  - How to manage credentials securely
 
 
 ---
@@ -1063,12 +1047,12 @@ print(result)
 
 
 
-Here’s a breakdown of how it works in last example:
+Here’s a breakdown of how it works in a real world example:
 
 - Warning handler: If a warning occurs during readRDS(), it will be caught and displayed using cli::cli_warn(). The warning is then muffled to prevent further output.
 
 - Error handler: If an error occurs, a custom error message is shown with cli::cli_alert_danger(), and NULL is returned as a fallback.
-- Finally: This code runs no matter what—whether there’s an error, a warning, or success. It’s useful for logging, cleanup, or confirming that the operation finished.
+- Finally: The code that runs no matter what. It’s useful for logging, cleanup, or confirming that the operation finished.
 
 
 
@@ -1114,10 +1098,9 @@ result &lt;- tryCatch(
 ---
 ## try()
 
+- Use `try()` if you don’t need detailed error handling logic but still want graceful failure: 
 
 .pull-left[
-
-- Use `try()` if you don’t need detailed error handling logic but still want graceful failure: 
 
 - It catches errors and continues running. The function runs the given expression, but if an error happens, it catches that error as an object instead of stopping the function.
 
@@ -1279,7 +1262,7 @@ myfun &lt;- function(export = FALSE, export_dir = "data") {
 }
 ```
 
-### 👉 Export only when asked and inform the user about it
+### 👉 Export only when asked and inform the user!
 
 
 
@@ -1295,7 +1278,7 @@ myfun &lt;- function(export = FALSE, export_dir = "data") {
 .pull-left[
 
 
-- The usethis package provides a handy function to open and edit your `.Renviron` file — a config file that’s automatically loaded every time R starts. 
+- The usethis package provides a handy function to open and edit your `.Renviron` file — a config file that’s automatically loaded every time R starts
 
 - It’s a great place to store personal, local secrets, or paths that shouldn’t be shared
 
@@ -1332,7 +1315,7 @@ The `.Renviron` approach works well for local development, but once it’s time 
 .pull-left[
 
 
-- The `dotenv` package lets you keep environment variables in a project-specific `.env` file
+- The `dotenv` package lets you keep environment variables in a project-specific `.env` file.
 
 - This approach is perfect when settings vary by project, or when you’re working in a team where everyone has different credentials, file paths, or environments
 
@@ -1348,7 +1331,7 @@ OPENAI_API_KEY=sk_project_specific_key
 
 .pull-right[
 
-- You can access these secrets after running the `load_dot_env()` function. 
+- You can access these secrets after running the `load_dot_env()` function.
 
 - The function reads the `.env` file and sets the variables as environment variables for your session:
 
@@ -1374,7 +1357,7 @@ It’s a hassle to juggle different setups — secrets, file paths, and other se
 
 - The `config` package lets you define multiple named environments (like default, dev, etc.) in a clean YAML file
 
-- The code just loads the correct configuration automatically, based on the current environment. All settings will be pulled from the appropriate section of the YAML file — no need to manually double-check; no need to rewrite part of your code.
+- The code just loads the correct configuration automatically, based on the current environment. All settings will be pulled from the appropriate section of the YAML file — no need to manually double-check; no need to rewrite part of your code
 
 
 
@@ -1395,7 +1378,7 @@ It’s a hassle to juggle different setups — secrets, file paths, and other se
 &lt;br&gt;
 
 &lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; Just switch the environment variable like you switch a light switch, and your code will adapt automatically.
+  &lt;i&gt;💡&lt;/i&gt; Just switch the environment variable like you switch a light switch, and your code will adapt automatically.
 &lt;/div&gt;
 
 
@@ -1420,7 +1403,7 @@ It’s a hassle to juggle different setups — secrets, file paths, and other se
 
 
 
-An example `config.yml` file is displayed on the right
+An example `config.yml` file:
 
 ```YAML
 default:
@@ -1457,7 +1440,7 @@ config::get("db_address")
 #&gt; "101.166.44.311"
 ```
 
-To switch environments, set the `R_CONFIG_ACTIVE` environment variable accordingly. 
+To switch environments, set the `R_CONFIG_ACTIVE` environment variable accordingly:
 
 
 ``` r
@@ -1478,9 +1461,9 @@ config::get("db_address")
 
 .pull-left[
 
-- Once a key is added to a Git repository, it’s written into the project’s history — and even if you delete the line later, the damage is done.
+- Once a key is added to a Git repository, it’s written into the project’s history — and even if you delete the line later, the damage is done
 
-- Make sure sensitive files are ignored and exclude them before you start to add your keys or crendetials. 
+- Make sure sensitive files are ignored and exclude them before you start to add your keys or crendetials
 
 - Consider the appropriate ignore file and add the config.yml or .env file to it:
   - .gitignore — for the Git setup
@@ -1516,7 +1499,7 @@ class: bottom, center
 - *Collaborative maintenance*—through comments, suggestions, or pair programming—helps ensure that the entire team feels ownership of the code and keeps it healthy for the long run
 
 - Code maintenance is an *ongoing process*:
-  - It’s not just about writing code that works today, but about ensuring it continues to work well as requirements evolve, dependencies change, and new team members join. 
+  - It’s not just about writing code that works today, but about ensuring it continues to work well as requirements evolve, dependencies change, and new team members join
   - Regularly revisiting and refactoring code, updating dependencies, and improving tests are all part of keeping your codebase in good shape
 
 
@@ -1549,9 +1532,9 @@ consistent style)
 
 .pull-left[
 
-- A clear, consistent style makes it easier to spot bugs, understand logic at a glance, and collaborate across a team.
+- A clear, consistent style makes it easier to spot bugs, understand logic at a glance, and collaborate across a team
 
-- The tidyverse style guide provides a clear, opinionated set of conventions for writing clean, consistent R code—covering everything from naming variables to how you should format pipes and function arguments.
+- The tidyverse style guide provides a clear, opinionated set of conventions for writing clean, consistent R code—covering everything from naming variables to how you should format pipes and function arguments
 
 
 
@@ -1562,7 +1545,7 @@ consistent style)
 .pull-right[
 
 &lt;div class="info-box"&gt;
-  &lt;i&gt;🦜&lt;/i&gt; By adopting this guide, we avoid the overhead of defining and maintaining our own custom rules; and we ensure that our code is immediately familiar to anyone experienced with the broader R community.
+  &lt;i&gt;💡&lt;/i&gt; By adopting this guide, we avoid the overhead of defining and maintaining our own custom rules; and we ensure that our code is immediately familiar to anyone experienced with the broader R community.
 
 
 &lt;/div&gt;
@@ -1625,7 +1608,7 @@ background-size: 8%
 
 ## Hello Lintr
 
-The lintr package can automatically flag deviations from your style guide.
+The lintr package automatically flags deviations from your style guide.
 
 .pull-left[
 
@@ -1657,7 +1640,7 @@ lintr::lint(text = 'myFunction &lt;- function(x, y) {
 
 
 
-R Package goodie 🦹‍♀️:
+R Package goodie 🦹:
 
 
 ``` r
@@ -1676,13 +1659,13 @@ background-size: 8%
 
 ## Hello Styler
 
-The styler package can reformat your code to match a consistent layout with a single command.
+The styler package reformats code to match a defined coding style with a single command.
 
 
 .pull-left[
 
 &lt;div class="info-box"&gt;
-  &lt;i&gt;🦜️️&lt;/i&gt; "styler formats your code according to the tidyverse style guide (https://style.tidyverse.org) (or your custom style guide) so you can direct your attention to the content of your code" (Müller and Walthert 2024).
+  &lt;i&gt;🦜️️&lt;/i&gt; "styler formats your code according to the tidyverse style guide (https://style.tidyverse.org) so you can direct your attention to the content of your code" (Müller and Walthert 2024).
 &lt;/div&gt;
 
 
@@ -1738,111 +1721,39 @@ styler::style_pkg()
 
 
 
+
+
+
 ---
-class: center, middle
-
-.left-column[
-
-## Keep in touch
-
-#### &lt;a href="https://edgar-treischl.de" target="_blank"&gt;&lt;img src="https://avatars.githubusercontent.com/u/77931249?s=400&amp;u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&amp;v=4" alt="www.edgar-treischl.de" width="25%"/&gt;&lt;br/&gt;www.edgar-treischl.de&lt;/a&gt;
-&lt;br/&gt;
-
-#### &lt;a href="https://github.com/edgar-treischl/Workshop_reproducibleR" target="_blank"&gt;&lt;img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="https://github.com/edgar-treischl" width="30%"/&gt;&lt;br/&gt;edgar-treischl&lt;/a&gt;
-
-
-]
-
-.right-column[
+class: right, middle
 
 
 ## Thank you for your attention!
+
+
+&lt;img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/77931249?s=400&amp;u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&amp;v=4" width="150px"/&gt;
+
+
+
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M505.12019,19.09375c-1.18945-5.53125-6.65819-11-12.207-12.1875C460.716,0,435.507,0,410.40747,0,307.17523,0,245.26909,55.20312,199.05238,128H94.83772c-16.34763.01562-35.55658,11.875-42.88664,26.48438L2.51562,253.29688A28.4,28.4,0,0,0,0,264a24.00867,24.00867,0,0,0,24.00582,24H127.81618l-22.47457,22.46875c-11.36521,11.36133-12.99607,32.25781,0,45.25L156.24582,406.625c11.15623,11.1875,32.15619,13.15625,45.27726,0l22.47457-22.46875V488a24.00867,24.00867,0,0,0,24.00581,24,28.55934,28.55934,0,0,0,10.707-2.51562l98.72834-49.39063c14.62888-7.29687,26.50776-26.5,26.50776-42.85937V312.79688c72.59753-46.3125,128.03493-108.40626,128.03493-211.09376C512.07526,76.5,512.07526,51.29688,505.12019,19.09375ZM384.04033,168A40,40,0,1,1,424.05,128,40.02322,40.02322,0,0,1,384.04033,168Z"&gt;&lt;/path&gt;&lt;/svg&gt; www.edgar-treischl.de](https://www.edgar-treischl.de)
+
+[&lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; edgar-treischl](https://github.com/edgar-treischl)
+
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm0 48v40.805c-22.422 18.259-58.168 46.651-134.587 106.49-16.841 13.247-50.201 45.072-73.413 44.701-23.208.375-56.579-31.459-73.413-44.701C106.18 199.465 70.425 171.067 48 152.805V112h416zM48 400V214.398c22.914 18.251 55.409 43.862 104.938 82.646 21.857 17.205 60.134 55.186 103.062 54.955 42.717.231 80.509-37.199 103.053-54.947 49.528-38.783 82.032-64.401 104.947-82.653V400H48z"&gt;&lt;/path&gt;&lt;/svg&gt; edgar.treischl@isb.bayern.de](mailto:edgar.treischl@isb.bayern.de)
+
+
+---
+class: right, middle
+
+
+
+## Licence
+
+This presentation is licensed under a CC-BY-NC 4.0 license.
+You may copy, distribute, and use the slides in your own work, as long as you give attribution to the original author on each slide that you use. Commercial use of the contents of these slides is not allowed.
 &lt;br/&gt;
-
-&lt;img src="https://i.gifer.com/D71m.gif" style="width: 40%"/&gt;
-
-]
-
-
-
-
-
-
-
----
-
-## References (1/2)
-
-
-&lt;p&gt;&lt;cite&gt;Hester, J.
-(2023).
-&lt;em&gt;covr: Test Coverage for Packages&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=covr"&gt;https://CRAN.R-project.org/package=covr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Hester, J., F. Angly, R. Hyde, et al.
-(2024).
-&lt;em&gt;lintr: A 'Linter' for R Code&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=lintr"&gt;https://CRAN.R-project.org/package=lintr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Müller, K.
-(2020).
-&lt;em&gt;here: A Simpler Way to Find Your Files&lt;/em&gt;.
-R package version 1.0.1.
-URL: &lt;a href="https://CRAN.R-project.org/package=here"&gt;https://CRAN.R-project.org/package=here&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Müller, K. and L. Walthert
-(2024).
-&lt;em&gt;styler: Non-Invasive Pretty Printing of R Code&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=styler"&gt;https://CRAN.R-project.org/package=styler&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Ushey, K. and H. Wickham
-(2024).
-&lt;em&gt;renv: Project Environments&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=renv"&gt;https://CRAN.R-project.org/package=renv&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H.
-(2023).
-&lt;em&gt;R Packages: Organize, Test, Document, and Share Your Code&lt;/em&gt;.
-Sebastopol, CA: O'Reilly.
-URL: &lt;a href="https://r-pkgs.org"&gt;https://r-pkgs.org&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H.
-(2011).
-&amp;ldquo;testthat: Get Started with Testing&amp;rdquo;.
-In: &lt;em&gt;The R Journal&lt;/em&gt; 3, pp. 5&amp;ndash;10.
-URL: &lt;a href="https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf"&gt;https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., J. Bryan, and M. Barrett
-(2024).
-&lt;em&gt;usethis: Automate Package and Project Setup&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=usethis"&gt;https://CRAN.R-project.org/package=usethis&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-
-
-
-
----
-
-## References (2/2)
-
-
-&lt;p&gt;&lt;cite&gt;Wickham, H., W. Chang, R. Flight, et al.
-(2021).
-&lt;em&gt;sessioninfo: R Session Information&lt;/em&gt;.
-R package version 1.2.2.
-URL: &lt;a href="https://CRAN.R-project.org/package=sessioninfo"&gt;https://CRAN.R-project.org/package=sessioninfo&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., P. Danenberg, G. Csárdi, et al.
-(2024).
-&lt;em&gt;roxygen2: In-Line Documentation for R&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=roxygen2"&gt;https://CRAN.R-project.org/package=roxygen2&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., J. Hesselberth, M. Salmon, et al.
-(2024).
-&lt;em&gt;pkgdown: Make Static HTML Documentation for a Package&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=pkgdown"&gt;https://CRAN.R-project.org/package=pkgdown&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., J. Hester, W. Chang, et al.
-(2022).
-&lt;em&gt;devtools: Tools to Make Developing R Packages Easier&lt;/em&gt;.
-R package version 2.4.5.
-URL: &lt;a href="https://CRAN.R-project.org/package=devtools"&gt;https://CRAN.R-project.org/package=devtools&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Xie, Y.
-(2024).
-&lt;em&gt;knitr: A General-Purpose Package for Dynamic Report Generation in R&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=knitr"&gt;https://CRAN.R-project.org/package=knitr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-
-
-
+&lt;br/&gt;
+&lt;img src="images/by-nceu.png" alt="Image left" width="150px"/&gt;
 
 
 

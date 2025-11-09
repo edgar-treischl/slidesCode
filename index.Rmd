@@ -165,7 +165,7 @@ class: bottom, center
 
 - Ever had code that worked perfectly on your machine — but mysteriously breaks when someone else tries to run it?
 
-- Old objects in your global environment, packages from another project, or global options you tweaked and forgot about — they all linger like ghosts. 
+- Old objects in your global environment linger like ghosts: 
 
 
 
@@ -174,7 +174,7 @@ class: bottom, center
 important_setting <- "production"
 
 # Previously loaded function from packages
-library(mypackage)
+library(CoolCats)
 
 # Changed global options
 options(stringsAsFactors = TRUE)  # Please don't do this in 2025
@@ -190,18 +190,18 @@ Your code may unknowingly rely on these leftovers. It runs perfectly on your mac
 
 .pull-left[
 
-- `r emoji::emoji("repeat")` Restart your R session, run your code from scratch (Ctrl + Shift + F10) and make it a habit
+- `r emoji::emoji("repeat")` Make it a Habit: Restart your R session and run your code from scratch (Ctrl + Shift + F10)
 
-- Do not save the workspace and do not load the workspace from an `.Rdata` file (Based on Bryan et al. 2021). 
+- Don't save the workspace and don't load the workspace from an `.Rdata` file 
 
-- It’s the only way to ensure your script actually works in a fresh, clean R session 
+- It’s the only way to ensure your code runs in a fresh, clean R session 
 
  
-#### The rm approach `r emoji::emoji("shoot")`
+### Abandon the rm approach `r emoji::emoji("shoot")`
 
-- `rm(list = ls())` deletes user-created objects from the global workspace.
+- `rm(list = ls())` deletes user-created objects from the global workspace
 
-- **But**: The script may break due to hidden dependencies on things you ran in this R process before you executed: Attached packages are not detached, changed options are not restored, working directory is untouched!
+- **But**: The code may break due to hidden dependencies: Attached packages are not detached, changed options are not restored, working directory is untouched!
 
 
 
@@ -225,22 +225,22 @@ background-size: 8%
 
 ### `r emoji::emoji("finger")` Code lives in R, Code and Text in Rmd files
 
-If you need to create a document from a source code, run:
+If you need to create a document from an `.R` file, run:
 
 ```{r, eval=FALSE}
-#spin converts an R script to an Rmd file
+# Spin converts an R script to an Rmd file
 knitr::spin("script.R")
 ```
 
-- Roxygen comments will be treated as text (more about that later)
-- Add yaml header to the script to control the output
+- Roxygen comments will be treated as text
+- Add a `YAML` header to the script to control the output
 
 
-If you need to extract the code from an Rmd file, run:
+If you need to extract the code from an `.Rmd` file, run:
 
 
 ```{r, eval=FALSE}
-#Extracts R code chunks from Rmd files
+# Extracts R code chunks from Rmd files
 knitr::purl()
 ```
 
@@ -253,7 +253,7 @@ background-image: url("images/beaker1.gif")
 background-size: cover
 class: bottom, center
 
-## .orange[Get rid of messy code `r emoji::emoji("silly")`] 
+## .orange[Write clean code, dude! `r emoji::emoji("silly")`] 
 
 
 
@@ -268,13 +268,13 @@ class: bottom, center
 - Simplicity
 - Clarity
 
-### Messy code often reveals itself through several common signs: 
+### Messy code often reveals itself: 
 
 - Long, complicated functions that try to do too much
 - Duplicated code scattered throughout scripts
 - Inconsistent naming that leaves you guessing what’s going on
-- Absolute paths
 - Hardcoded values
+- Absolute paths
 
 
 ---
@@ -284,12 +284,6 @@ class: bottom, center
 <img src="images/drake.png" style="width: 65%"/>
 
 
----
-
-class: middle, center, inverse
-
-## Abandon absolute paths, they will break anyway ...
-
 
 ---
 
@@ -298,10 +292,10 @@ class: middle, center, inverse
 
 ```{r, eval=TRUE, error=TRUE}
 # Don't:
-readr::read_csv("~/Documents/Berichte/orig/104_data.csv")
+readr::read_csv("~/Documents/reports/data/104_data.csv")
 ```
 
-### `r emoji::emoji("lightning")` Ceate a project and use the `here` package:
+### `r emoji::emoji("lightning")` Create a project and use the `here` package:
 
 ```{r}
 # Here returns the path to the project
@@ -310,8 +304,8 @@ here::here()
 
 
 ```{r, eval=TRUE}
-# Create a path to the file
-here::here("data", "descriptive_title.csv")
+# Create a path to the file is a piece of cake
+here::here("data", "muppets_income.csv")
 ```
 
 
@@ -320,49 +314,33 @@ here::here("data", "descriptive_title.csv")
 
 
 
----
 
-class: middle, center, inverse
+
+---
 
 ## Avoid Hardcoding Values or I’ll Burn Your Code
 
+- The pain begins if you forget to integrate hard coded values as function parameters:
 
 
----
-
-## Avoid Hardcoding Values
-
-.pull-left[
-
-<div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> The pain begins if you forget to integrate those values as function parameters and later on your code becomes a mess to maintain.
-</div>
-
-
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 library(dplyr)
-filtered_data <- mtcars |> filter(mpg > 25)
+filtered_data <- mtcars |> 
+  filter(mpg > 25)
 ```
 
-]
+### `r emoji::emoji("frog")` This makes your code a mess to maintain
 
-.pull-right[
-
-<div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> What if you want to filter by a different age? You’d have to search through your code to find every instance of 30 and change it — and probably forget values.
-</div>
+- What if you need to filter a different value? You’d have to search through your code to find every instance of the hard coded value and change it — and you probably forget half of them.
 
 
-
+- Another one? Rounding hell in a large report:
 
 
 ```{r, eval=FALSE}
 # Hardcoded rounding is not bad, true?
 mtcars |> mutate(mpg_rounded = round(mpg, 2))
 ```
-
-]
-
 
 
 
@@ -386,14 +364,14 @@ mtcars |>
 ```
 
 
-- Once you start wrapping code into functions, pass those values as arguments — even if you don’t plan to change them right now. You’re future-proofing your code.
+- Once you start wrapping code into functions, pass values as arguments — even if you don’t plan to change them right now. You’re future-proofing your code.
 
 
 ---
 
 ## Avoid Hardcoding Values III
 
-### Move it into a function with a default:
+### Move it into a function (with a default):
 
 ```{r}
 filter_and_round <- function(data, mpg_limit, digits = 2) {
@@ -406,7 +384,8 @@ filter_and_round <- function(data, mpg_limit, digits = 2) {
 filter_and_round(mtcars, mpg_limit = 25)
 ```
 
-=> This approach makes your code flexible, readable, and much easier to maintain. 
+
+#### `r emoji::emoji("point_right")` This approach makes your code flexible, readable, and much easier to maintain
 
 ---
 background-image: url("images/cookimonster.gif")
@@ -421,35 +400,29 @@ class: bottom, center
 
 ### `r emoji::emoji("point_right")` Each function should do one thing — and do it well
 
-- Modularity means breaking your code into smaller, self-contained pieces—typically functions — where each one handles a specific task
+- Modularity means breaking your code into smaller, self-contained pieces — typically functions, where each one handles one specific task
 - Instead of writing one long script that tries to do everything, modular code splits the work into clear, manageable chunks
 
 
-### `r emoji::emoji("point_right")` This makes your code easier to read, test, and develop
+### `r emoji::emoji("point_right")` Modular code makes your code easier to read, test, and develop
 
 - Each piece can be understood and worked on independently
 - Reusable functions save time and reduce duplication
 - Testing is simpler because you can write small, focused tests instead of validating everything at once
-- And when changes are needed, they’re easier to make since you only need to update one part of the codebase
+- Changes easier to apply, since you only need to update one part of the codebase
 
 
 
 ---
-
-class: middle, center, inverse
-
-## Don’t Dump Everything in One Function
-
-
----
-
 ## Don’t Dump Everything in One Function
 
 .pull-left[
 
-- It’s tempting to just get everything working in a single function or a long R script — a pipeline that loads the data, cleans it, analyzes it, and spits out a plot or, more generally, the result.
+- It’s tempting to just get everything working in a single function or a long script — a pipeline that loads the data, cleans it, analyzes it, calls your mum, and spits out the result.
 
-- As soon as you need to tweak something, explain it to someone else, or reuse part of it, things get messy. Suddenly, you’re stuck picking apart a script that’s hard to read, hard to change, and the code may break.
+- As soon as you need to tweak something, explain it to someone else, or reuse part of it, things get messy. 
+
+Suddenly, you’re stuck picking apart a script that’s hard to read, hard to change, and the code may break.
 
 ]
 
@@ -475,22 +448,28 @@ plot(df$sqft, df$price_log)
 
 ]
 
-### Keep it simple, stupid! Don't violated the KISS `r emoji::emoji("lips")` principle
+### `r emoji::emoji("kiss")` Keep it simple, stupid! Don't violate the KISS principle
 
 
 ---
 
 ## Don’t Dump Everything in One Function
 
+- At first glance, it might seem fine — but now imagine you want to reuse the cleaning logic in a different script. Or test how the model works on another dataset. Or change the plotting code without rerunning the model. 
 
-<div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> At first glance, it might seem fine — but now imagine you want to reuse the cleaning logic in a different script. Or test how the model works on another dataset. Or change the plotting code without rerunning the model. You’re stuck. Everything depends on everything else.
-</div>
 
-> Your next step is code modularization which means breaking your logic into small, focused functions that each do one thing. That’s called separation of concerns, and it’s what keeps your code from turning into a tangled mess of confusion. Do yourself a huge favour: break your code into logical, reusable pieces.
+### `r emoji::emoji("frog")` You’re stuck. Everything depends on everything else.
 
-- Separate at least logically, for example, put function that belong to data preparation, analysis, and reporting into different functions.
-- If you want to organize your codebase, create separate R scripts (e.g., analyze.R, plot.R) that follow your internal logic — and define functions for each logical, reusable step.
+
+
+### `r emoji::emoji("point_right")` Modularize Code: Break your code into logical, reusable pieces
+
+- Break your logic into small, focused functions that each do one thing. 
+
+- That’s called *separation of concerns*. Separate *at least* logically:
+  - Insert code that belong to data preparation, analysis, and reporting into *separate functions*
+  - Organize your codebase, create separate R scripts (e.g., analyze.R, plot.R) that follow your internal logic 
+  - Define functions for each logical, reusable step
 
 
 
@@ -498,7 +477,7 @@ plot(df$sqft, df$price_log)
 
 ## Don’t Dump Everything in One Function
 
-Break it down into smaller functions:
+### `r emoji::emoji("cookie")` Break ’em into nice bites ...
 
 ```r
 # source.R
@@ -515,14 +494,14 @@ clean_data <- function(df) {
 ```
 
 
-#### `r emoji::emoji("lightning")` This approach still violates the single responsibility principle, but it’s a start!
+### `r emoji::emoji("lightning")` This approach is not a clean separation of concerns if your function does more than one thing, but it’s a start!
 
 
 ---
 
 ## Don’t Dump Everything in One Function
 
-=> If the last code is saved in a file called `source.R`, you can source it and call the functions as needed.
+### `r emoji::emoji("cookie")` Save and source it ...
 
 ```{r, eval=FALSE}
 # Source the functions
@@ -537,7 +516,7 @@ plot_relationship(df_clean)
 
 
 <div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> This version is better because it's modular, readable, and flexible. Want to swap in a new dataset? Easy. Want to test the clean_data function? Just do it, you are on fire.
+  <i>`r emoji::emoji("light_bulb")`</i> This version is better because it's modular, readable, and flexible. Want to swap in a new dataset? Easy. Want to test the clean_data function? Just do it, you are on fire!
 </div>
 
 
@@ -548,7 +527,7 @@ plot_relationship(df_clean)
 ## Don’t Dump Everything in One Function
 
 
-If the code need to run in sequence, wrap them in a function that makes the workflow explicit.
+### The code need to run in sequence? Wrap it in a function
 
 ```{r, eval=FALSE}
 # Wrap the workflow in a function
@@ -563,9 +542,11 @@ run_job <- function(data_path) {
 }
 ```
 
-- It helps others understand how your code fits together
+- This make the workflow explicit: It helps others understand how your code fits together
 
 - Only after we break our code into logical, reusable pieces, we can really get to understand how to refactor it. Of course, it is extra work, but it’s part of the development process.
+
+#### Finally, you can build an R package for our source code `r emoji::emoji("kiss")`
 
 
 ---
@@ -577,7 +558,7 @@ run_job <- function(data_path) {
 .pull-left[
 
 <div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> Repeating the same code multiple times increases the risk of errors, bloats scripts, and makes maintenance harder. The DRY principle encourages you to write logic once and reuse it via functions. This makes your code cleaner, easier to test, and more maintainable.
+  <i>`r emoji::emoji("light_bulb")`</i> Repeating the same code multiple times increases the risk of errors, bloats scripts, and makes maintenance harder. The DRY principle encourages you to write logic once and reuse it via functions. This makes your code cleaner, easier to test, and more maintainable.
 </div>
 
 
@@ -587,8 +568,9 @@ run_job <- function(data_path) {
 .pull-right[
 
 ```{r}
-library(gapminder)
+# Some repetitive code ...
 library(dplyr)
+library(gapminder)
 
 # Filter for Germany in 2007
 germany_2007 <- gapminder |>
@@ -615,7 +597,7 @@ japan_2007 <- gapminder |>
 ---
 ## Don’t Repeat Yourself II
 
-- Turn repeated code into parameterized functions to save time and avoid bugs.
+Turn repeated code into parameterized functions to save time and avoid bugs
 
 ```{r}
 slice_gapminder <- function(data, country, year) {
@@ -625,19 +607,19 @@ slice_gapminder <- function(data, country, year) {
 }
 ```
 
-Now it's clean and reusable:
+### `r emoji::emoji("point_right")` Clean and reusable:
 
 ```{r}
 japan_2007 <- slice_gapminder(gapminder, "Japan", 2007)
 japan_2007
 ```
 
-Creating a function does not imply that we are ready yet.
+
 
 ---
 ## Don’t Repeat Yourself III
 
-There is another very common blind spot when we apply functions:
+Creating a function does not imply that we are ready yet. There is another very common blind spot:
 
 ```{r, eval=FALSE}
 # Coding is hard work
@@ -646,7 +628,9 @@ germany_2002 <- slice_gapminder(gapminder, "Germany", 2002)
 france_2002 <- slice_gapminder(gapminder, "France", 2002)
 ```
 
-`r emoji::emoji("point_right")` Functions itself do not solve the problem of repetition if we call them repeatedly with only slight variations. 
+Functions itself do not solve the problem of repetition if we call them repeatedly with only slight variations. 
+
+### `r emoji::emoji("point_right")` Base R and purrr help to avoid repetition
 
 
 ---
@@ -748,19 +732,19 @@ class: bottom, center
 ---
 ## Robust Code
 
-- A robust function behaves consistently: given the same input, it always returns the same output. This reliability starts with clearly defined inputs and outputs. 
+A robust function behaves consistently: given the same input, it always returns the same output. This reliability starts with clearly defined inputs and outputs. 
 
-A function should receive all the data it needs through its arguments—and return its results explicitly. 
+### `r emoji::emoji("point_right")` A function should receive all it needs through its arguments — and return its results explicitly
 
-- It should not rely on global variables or hidden dependencies. 
+- It should *not rely* on *global variables* or *hidden dependencies*
 
--  when each function is a self-contained unit, it’s easier to reuse and combine across your analysis or pipeline. 
+-  When each function is a *self-contained unit*, it’s easier to reuse and combine across your analysis or pipeline
 
-- how to write functions that handle errors gracefully
+- Next:
 
-- avoid unintended side effects (like accidental data exports)
-
-- manage credentials securely
+  - How to handle errors gracefully
+  - How to avoid unintended side effects (like accidental data exports)
+  - How to manage credentials securely
 
 
 ---
@@ -985,12 +969,12 @@ result <- tryCatch({
 
 
 
-Here’s a breakdown of how it works in last example:
+Here’s a breakdown of how it works in a real world example:
 
 - Warning handler: If a warning occurs during readRDS(), it will be caught and displayed using cli::cli_warn(). The warning is then muffled to prevent further output.
 
 - Error handler: If an error occurs, a custom error message is shown with cli::cli_alert_danger(), and NULL is returned as a fallback.
-- Finally: This code runs no matter what—whether there’s an error, a warning, or success. It’s useful for logging, cleanup, or confirming that the operation finished.
+- Finally: The code that runs no matter what. It’s useful for logging, cleanup, or confirming that the operation finished.
 
 
 
@@ -1027,10 +1011,9 @@ result <- tryCatch(
 ---
 ## try()
 
+- Use `try()` if you don’t need detailed error handling logic but still want graceful failure: 
 
 .pull-left[
-
-- Use `try()` if you don’t need detailed error handling logic but still want graceful failure: 
 
 - It catches errors and continues running. The function runs the given expression, but if an error happens, it catches that error as an object instead of stopping the function.
 
@@ -1181,7 +1164,7 @@ myfun <- function(export = FALSE, export_dir = "data") {
 }
 ```
 
-### `r emoji::emoji("point_right")` Export only when asked and inform the user about it
+### `r emoji::emoji("point_right")` Export only when asked and inform the user!
 
 
 
@@ -1197,7 +1180,7 @@ myfun <- function(export = FALSE, export_dir = "data") {
 .pull-left[
 
 
-- The usethis package provides a handy function to open and edit your `.Renviron` file — a config file that’s automatically loaded every time R starts. 
+- The usethis package provides a handy function to open and edit your `.Renviron` file — a config file that’s automatically loaded every time R starts
 
 - It’s a great place to store personal, local secrets, or paths that shouldn’t be shared
 
@@ -1233,7 +1216,7 @@ The `.Renviron` approach works well for local development, but once it’s time 
 .pull-left[
 
 
-- The `dotenv` package lets you keep environment variables in a project-specific `.env` file
+- The `dotenv` package lets you keep environment variables in a project-specific `.env` file.
 
 - This approach is perfect when settings vary by project, or when you’re working in a team where everyone has different credentials, file paths, or environments
 
@@ -1249,7 +1232,7 @@ OPENAI_API_KEY=sk_project_specific_key
 
 .pull-right[
 
-- You can access these secrets after running the `load_dot_env()` function. 
+- You can access these secrets after running the `load_dot_env()` function.
 
 - The function reads the `.env` file and sets the variables as environment variables for your session:
 
@@ -1274,7 +1257,7 @@ It’s a hassle to juggle different setups — secrets, file paths, and other se
 
 - The `config` package lets you define multiple named environments (like default, dev, etc.) in a clean YAML file
 
-- The code just loads the correct configuration automatically, based on the current environment. All settings will be pulled from the appropriate section of the YAML file — no need to manually double-check; no need to rewrite part of your code.
+- The code just loads the correct configuration automatically, based on the current environment. All settings will be pulled from the appropriate section of the YAML file — no need to manually double-check; no need to rewrite part of your code
 
 
 
@@ -1295,7 +1278,7 @@ It’s a hassle to juggle different setups — secrets, file paths, and other se
 <br>
 
 <div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> Just switch the environment variable like you switch a light switch, and your code will adapt automatically.
+  <i>`r emoji::emoji("light_bulb")`</i> Just switch the environment variable like you switch a light switch, and your code will adapt automatically.
 </div>
 
 
@@ -1320,7 +1303,7 @@ It’s a hassle to juggle different setups — secrets, file paths, and other se
 
 
 
-An example `config.yml` file is displayed on the right
+An example `config.yml` file:
 
 ```YAML
 default:
@@ -1356,7 +1339,7 @@ config::get("db_address")
 #> "101.166.44.311"
 ```
 
-To switch environments, set the `R_CONFIG_ACTIVE` environment variable accordingly. 
+To switch environments, set the `R_CONFIG_ACTIVE` environment variable accordingly:
 
 ```{r, eval=FALSE}
 Sys.setenv(R_CONFIG_ACTIVE = "production")
@@ -1376,9 +1359,9 @@ config::get("db_address")
 
 .pull-left[
 
-- Once a key is added to a Git repository, it’s written into the project’s history — and even if you delete the line later, the damage is done.
+- Once a key is added to a Git repository, it’s written into the project’s history — and even if you delete the line later, the damage is done
 
-- Make sure sensitive files are ignored and exclude them before you start to add your keys or crendetials. 
+- Make sure sensitive files are ignored and exclude them before you start to add your keys or crendetials
 
 - Consider the appropriate ignore file and add the config.yml or .env file to it:
   - .gitignore — for the Git setup
@@ -1414,7 +1397,7 @@ class: bottom, center
 - *Collaborative maintenance*—through comments, suggestions, or pair programming—helps ensure that the entire team feels ownership of the code and keeps it healthy for the long run
 
 - Code maintenance is an *ongoing process*:
-  - It’s not just about writing code that works today, but about ensuring it continues to work well as requirements evolve, dependencies change, and new team members join. 
+  - It’s not just about writing code that works today, but about ensuring it continues to work well as requirements evolve, dependencies change, and new team members join
   - Regularly revisiting and refactoring code, updating dependencies, and improving tests are all part of keeping your codebase in good shape
 
 
@@ -1447,9 +1430,9 @@ consistent style)
 
 .pull-left[
 
-- A clear, consistent style makes it easier to spot bugs, understand logic at a glance, and collaborate across a team.
+- A clear, consistent style makes it easier to spot bugs, understand logic at a glance, and collaborate across a team
 
-- The tidyverse style guide provides a clear, opinionated set of conventions for writing clean, consistent R code—covering everything from naming variables to how you should format pipes and function arguments.
+- The tidyverse style guide provides a clear, opinionated set of conventions for writing clean, consistent R code—covering everything from naming variables to how you should format pipes and function arguments
 
 
 
@@ -1460,7 +1443,7 @@ consistent style)
 .pull-right[
 
 <div class="info-box">
-  <i>`r emoji::emoji("parrot")`</i> By adopting this guide, we avoid the overhead of defining and maintaining our own custom rules; and we ensure that our code is immediately familiar to anyone experienced with the broader R community.
+  <i>`r emoji::emoji("light_bulb")`</i> By adopting this guide, we avoid the overhead of defining and maintaining our own custom rules; and we ensure that our code is immediately familiar to anyone experienced with the broader R community.
 
 
 </div>
@@ -1523,7 +1506,7 @@ background-size: 8%
 
 ## Hello Lintr
 
-The lintr package can automatically flag deviations from your style guide.
+The lintr package automatically flags deviations from your style guide.
 
 .pull-left[
 
@@ -1566,13 +1549,13 @@ background-size: 8%
 
 ## Hello Styler
 
-The styler package can reformat your code to match a consistent layout with a single command.
+The styler package reformats code to match a defined coding style with a single command.
 
 
 .pull-left[
 
 <div class="info-box">
-  <i>`r emoji::emoji("parrot")`️️</i> "styler formats your code according to the tidyverse style guide (https://style.tidyverse.org) (or your custom style guide) so you can direct your attention to the content of your code" (Müller and Walthert 2024).
+  <i>`r emoji::emoji("parrot")`️️</i> "styler formats your code according to the tidyverse style guide (https://style.tidyverse.org) so you can direct your attention to the content of your code" (Müller and Walthert 2024).
 </div>
 
 
@@ -1619,126 +1602,39 @@ styler::style_pkg()
 
 
 
+
+
+
 ---
-class: center, middle
-
-.left-column[
-
-## Keep in touch
-
-#### <a href="https://edgar-treischl.de" target="_blank"><img src="https://avatars.githubusercontent.com/u/77931249?s=400&u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&v=4" alt="www.edgar-treischl.de" width="25%"/><br/>www.edgar-treischl.de</a>
-<br/>
-
-#### <a href="https://github.com/edgar-treischl/Workshop_reproducibleR" target="_blank"><img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="https://github.com/edgar-treischl" width="30%"/><br/>edgar-treischl</a>
-
-
-]
-
-.right-column[
+class: right, middle
 
 
 ## Thank you for your attention!
+
+
+<img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/77931249?s=400&u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&v=4" width="150px"/>
+
+
+
+[`r icons::fontawesome("rocket")` www.edgar-treischl.de](https://www.edgar-treischl.de)
+
+[`r icons::fontawesome("github")` edgar-treischl](https://github.com/edgar-treischl)
+
+[`r icons::fontawesome("envelope")` edgar.treischl@isb.bayern.de](mailto:edgar.treischl@isb.bayern.de)
+
+
+---
+class: right, middle
+
+
+
+## Licence
+
+This presentation is licensed under a CC-BY-NC 4.0 license.
+You may copy, distribute, and use the slides in your own work, as long as you give attribution to the original author on each slide that you use. Commercial use of the contents of these slides is not allowed.
 <br/>
-
-<img src="https://i.gifer.com/D71m.gif" style="width: 40%"/>
-
-]
-
-
-
-
-
-
-
----
-
-## References (1/2)
-
-
-```{r, print_refs, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
-
-print(bib[key = "covr"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "lintr"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "here"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "styler"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "renv"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-
-print(bib[key = "wickham_r_2015"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "testthat"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "usethis"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-```
-
-
-
-
----
-
-## References (2/2)
-
-
-```{r, print_refs2, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
-
-print(bib[key = "sessioninfo"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "roxygen2"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "pkgdown"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "devtools"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "knitr"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-```
-
-
-
+<br/>
+<img src="images/by-nceu.png" alt="Image left" width="150px"/>
 
 
 
