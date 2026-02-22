@@ -76,7 +76,7 @@ class: center, middle, title-slide
 
 ### &lt;a href="http://www.edgar-treischl.de" target="_blank"&gt;Dr. Edgar J. Treischl&lt;/a&gt;
 
-.white[Last update: 2025-11-22]
+.white[Last update: 2026-02-22]
 
 .footnote.slide-footer[
   Press ⭕ or ➡️ to navigate
@@ -176,10 +176,6 @@ Your code may unknowingly rely on these leftovers. It runs perfectly on your mac
 
 - **But**: The code may break due to hidden dependencies: Attached packages are not detached, changed options are not restored, working directory is untouched!
 
-
-
-
-
 ]
 
 .pull-right[
@@ -196,7 +192,7 @@ background-size: 8%
 
 ## R vs. Rmd
 
-### 🫰 Code lives in R, Code and Text in Rmd files
+### 🖕 Code lives in R, Code and Text in Rmd files
 
 If you need to create a document from an `.R` file, run:
 
@@ -228,7 +224,7 @@ background-image: url("images/beaker1.gif")
 background-size: cover
 class: bottom, center
 
-## .orange[Write clean code, dude! 😜] 
+## .orange[Write clean code, dude! 👻] 
 
 
 
@@ -272,7 +268,8 @@ readr::read_csv("~/Documents/reports/data/104_data.csv")
 ```
 
 ```
-## Error: '~/Documents/reports/data/104_data.csv' does not exist.
+## Error:
+## ! '~/Documents/reports/data/104_data.csv' does not exist.
 ```
 
 ### ⚡ Create a project and use the `here` package:
@@ -357,13 +354,20 @@ mtcars |&gt;
 ```
 
 ```
-##                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb mpg_rounded
-## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1        32.4
-## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2        30.4
-## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1        33.9
-## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1        27.3
-## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2        26.0
-## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2        30.4
+##                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+##                mpg_rounded
+## Fiat 128              32.4
+## Honda Civic           30.4
+## Toyota Corolla        33.9
+## Fiat X1-9             27.3
+## Porsche 914-2         26.0
+## Lotus Europa          30.4
 ```
 
 
@@ -389,13 +393,20 @@ filter_and_round(mtcars, mpg_limit = 25)
 ```
 
 ```
-##                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb mpg_rounded
-## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1        32.4
-## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2        30.4
-## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1        33.9
-## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1        27.3
-## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2        26.0
-## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2        30.4
+##                 mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+## Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1
+## Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2
+## Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1
+## Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1
+## Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2
+## Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2
+##                mpg_rounded
+## Fiat 128              32.4
+## Honda Civic           30.4
+## Toyota Corolla        33.9
+## Fiat X1-9             27.3
+## Porsche 914-2         26.0
+## Lotus Europa          30.4
 ```
 
 
@@ -410,12 +421,55 @@ class: bottom, center
 
 
 ---
+
+## Write Clean Code for Humans, not 🤖
+
+.pull-left[
+
+- *Optimize for Readers, not the Writer*: Apply the “Six-Month Rule”
+- *Reduce cognitive load*: No deep nesting, no long functions
+- *Keep one level of abstraction* per code block (next section: Don't Dump Everything in One Function)
+- *Avoid cleverness/hacks*: Write dull but clear code
+- *Be consistent* (see section about Tidyverse Style)
+- *Make dependencies explicit* (Input &gt; Output)
+- *Enable local reasoning*: Can I understand the code without running it? Can I understand it without looking at other parts of the codebase?
+
+]
+
+.pull-right[
+
+
+``` r
+# Deep nested and hard to read
+result &lt;- mean(na.omit(as.numeric(subset(mtcars, am == 1 &amp; cyl == 6)$hp)))
+
+# Apply logical steps that future you/others can understand
+filtered_cars &lt;- subset(mtcars, am == 1 &amp; cyl == 6)
+numeric_hp &lt;- as.numeric(filtered_cars$hp)
+result &lt;- mean(na.omit(numeric_hp))
+result
+```
+
+```
+## [1] 131.6667
+```
+
+
+
+]
+
+
+
+
+
+
+---
 ## Modular Code
 
 ### 👉 Each function should do one thing — and do it well
 
 - Modularity means breaking your code into smaller, self-contained pieces — typically functions, where each one handles one specific task
-- Instead of writing one long script that tries to do everything, modular code splits the work into clear, manageable chunks
+- Instead of writing one long script that tries to do everything, modular code splits the work into clear, manageable chunks (Single Responsibility Principle)
 
 
 ### 👉 Modular code makes your code easier to read, test, and develop
@@ -1640,7 +1694,7 @@ lintr::lint(text = 'myFunction &lt;- function(x, y) {
 
 
 
-R Package goodie 🦹‍♂️:
+R Package goodie 🦹:
 
 
 ``` r
@@ -1694,7 +1748,7 @@ styler::style_text(
 
 ]
 
-R Package goodie 🦹:
+R Package goodie 🦹‍♀️:
 
 
 ``` r
