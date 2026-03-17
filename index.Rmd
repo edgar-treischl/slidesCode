@@ -1568,7 +1568,8 @@ lintr::lint(text = 'myFunction <- function(x, y) {
 R Package goodie `r emoji::emoji("bad")`:
 
 ```{r, eval=FALSE}
-#lintr::lint_dir(path = "R")
+#> lintr::lint(filename = "R/f_updates.R")
+#> lintr::lint_dir(path = "R")
 lintr::lint_package()
 ```
 
